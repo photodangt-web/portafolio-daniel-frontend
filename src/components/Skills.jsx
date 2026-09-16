@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import Section from './Section'
-import { skills } from '../data/content'
 
 const container = {
   hidden: {},
@@ -27,7 +26,18 @@ const panel = {
   },
 }
 
-export default function Skills() {
+export default function Skills({ skills }) {
+  const categories = Array.isArray(skills?.categories)
+    ? skills.categories
+        .map((cat) => ({
+          title: String(cat?.title || 'Otros').trim() || 'Otros',
+          items: Array.isArray(cat?.items)
+            ? cat.items.map((item) => String(item || '').trim()).filter(Boolean)
+            : [],
+        }))
+        .filter((cat) => cat.items.length > 0)
+    : []
+
   return (
     <Section
       id="skills"
@@ -38,13 +48,12 @@ export default function Skills() {
       <motion.div
         variants={container}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
+        animate="visible"
         className="grid gap-4 lg:grid-cols-2"
       >
-        {skills.categories.map((cat, catIndex) => (
+        {categories.map((cat, catIndex) => (
           <motion.div
-            key={cat.title}
+            key={`${cat.title}-${catIndex}`}
             variants={panel}
             whileHover={{ y: -4 }}
             className="relative overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--bg-card)] p-6 md:p-7"

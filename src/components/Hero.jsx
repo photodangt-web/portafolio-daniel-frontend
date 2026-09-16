@@ -1,9 +1,7 @@
 import { motion } from 'framer-motion'
 import { MapPin, ArrowDownRight } from 'lucide-react'
-import TextReveal from './TextReveal'
 import Magnetic from './Magnetic'
 import HeroPhoto from './HeroPhoto'
-import { profile } from '../data/content'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32, filter: 'blur(10px)' },
@@ -19,7 +17,42 @@ const fadeUp = {
   }),
 }
 
-export default function Hero() {
+const tokenPattern = /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b(?:const|let|var|function|return|async|await|export|import)\b|\b(?:true|false|null|undefined)\b|\b\d+(?:\.\d+)?\b)/g
+
+function highlightConsole(code) {
+  const nodes = []
+  let cursor = 0
+
+  for (const match of code.matchAll(tokenPattern)) {
+    const token = match[0]
+    const index = match.index ?? 0
+    if (index > cursor) nodes.push(code.slice(cursor, index))
+
+    const className = /^(const|let|var|function|return|async|await|export|import)$/.test(token)
+      ? 'text-violet-600 dark:text-violet-400'
+      : /^(true|false|null|undefined)$/.test(token)
+        ? 'text-sky-600 dark:text-sky-400'
+        : /^\d/.test(token)
+          ? 'text-amber-600 dark:text-amber-400'
+          : 'text-emerald-600 dark:text-emerald-400'
+
+    nodes.push(<span key={`${index}-${token}`} className={className}>{token}</span>)
+    cursor = index + token.length
+  }
+
+  if (cursor < code.length) nodes.push(code.slice(cursor))
+  return nodes
+}
+
+function defaultHeroConsole(name) {
+  return `const dev = {
+  name: ${JSON.stringify(name)},
+  stack: ["React", "Vite", "Node"],
+  openToWork: true,
+}`
+}
+
+export default function Hero({ profile }) {
   return (
     <section
       id="top"
@@ -88,6 +121,7 @@ export default function Hero() {
             <Magnetic strength={0.4} radius={100}>
               <a
                 href="#projects"
+                data-analytics="hero_projects"
                 className="group inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-7 py-3.5 text-sm font-medium text-[var(--accent-fg)] shadow-lg transition-transform"
               >
                 Ver trabajo
@@ -100,6 +134,7 @@ export default function Hero() {
             <Magnetic strength={0.35} radius={90}>
               <a
                 href="#contact"
+                data-analytics="hero_contact"
                 className="glass inline-flex items-center rounded-full px-7 py-3.5 text-sm font-medium text-[var(--fg)] transition hover:border-[var(--border-strong)]"
               >
                 Contactar
@@ -123,31 +158,14 @@ export default function Hero() {
               </span>
             </div>
             <pre className="overflow-x-auto px-4 py-4">
-              <code>
-                <span className="text-[var(--fg-faint)]">const</span>{' '}
-                <span className="text-[var(--fg)]">dev</span> = {'{\n'}
-                {'  '}name:{' '}
-                <span className="text-emerald-600 dark:text-emerald-400">
-                  "{profile.name}"
-                </span>
-                ,{'\n'}
-                {'  '}stack:{' '}
-                <span className="text-emerald-600 dark:text-emerald-400">
-                  ["React", "Vite", "Node"]
-                </span>
-                ,{'\n'}
-                {'  '}openToWork:{' '}
-                <span className="text-sky-600 dark:text-sky-400">true</span>,
-                {'\n'}
-                {'}'}
-              </code>
+              <code>{highlightConsole(profile.heroConsole?.trim() || defaultHeroConsole(profile.name))}</code>
             </pre>
           </motion.div>
         </div>
 
         {/* ——— Columna derecha: foto ——— */}
         <div className="relative flex justify-center lg:justify-end lg:pr-2">
-          <HeroPhoto />
+          <HeroPhoto profile={profile} />
         </div>
       </div>
     </section>

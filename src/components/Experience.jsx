@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import Section from './Section'
-import { experience } from '../data/content'
 
-export default function Experience() {
+export default function Experience({ experience }) {
   const [open, setOpen] = useState(0)
 
   return (

@@ -3,9 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle2, Mail } from 'lucide-react'
 import Section from './Section'
 import Magnetic from './Magnetic'
-import { profile } from '../data/content'
 
-export default function Contact() {
+export default function Contact({ profile }) {
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -72,6 +71,7 @@ export default function Contact() {
             <h3 className="text-lg font-semibold text-[var(--fg)]">Email directo</h3>
             <a
               href={`mailto:${profile.email}`}
+              data-analytics="contact_email"
               className="mt-2 block text-sm text-[var(--fg-muted)] transition hover:text-[var(--fg)]"
             >
               {profile.email}
@@ -86,6 +86,7 @@ export default function Contact() {
               <motion.a
                 key={key}
                 href={url}
+                data-analytics={`social_${key}`}
                 target="_blank"
                 rel="noreferrer"
                 initial={{ opacity: 0, y: 12 }}

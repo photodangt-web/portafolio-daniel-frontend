@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { User } from 'lucide-react'
 
@@ -10,11 +10,17 @@ import { User } from 'lucide-react'
  *    (o cambia PHOTO_SRC abajo)
  * 2. Recomendado: ~800×1000 px, fondo transparente o limpio
  */
-const PHOTO_SRC = '/profile.png'
+const FALLBACK_PHOTO_SRC = '/profile.png'
 
-export default function HeroPhoto() {
+export default function HeroPhoto({ profile }) {
   const [loaded, setLoaded] = useState(false)
   const [failed, setFailed] = useState(false)
+  const photoSrc = profile.avatar || FALLBACK_PHOTO_SRC
+
+  useEffect(() => {
+    setLoaded(false)
+    setFailed(false)
+  }, [photoSrc])
 
   const showPlaceholder = failed || !loaded
 
@@ -46,8 +52,8 @@ export default function HeroPhoto() {
         {/* imagen real — se muestra cuando public/profile.png existe */}
         {!failed && (
           <img
-            src={PHOTO_SRC}
-            alt="Daniel de León"
+            src={photoSrc}
+            alt={profile.name}
             onLoad={() => setLoaded(true)}
             onError={() => setFailed(true)}
             className={`absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-700 ${
@@ -83,7 +89,7 @@ export default function HeroPhoto() {
         transition={{ delay: 0.85, duration: 0.5 }}
         className="glass absolute -bottom-3 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-2 text-xs font-medium text-[var(--fg-muted)] shadow-lg"
       >
-        Guatemala · Web Dev
+        {profile.location} · {profile.role}
       </motion.div>
     </motion.div>
   )

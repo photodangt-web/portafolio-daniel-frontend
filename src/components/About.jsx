@@ -1,9 +1,8 @@
 import { motion } from 'framer-motion'
 import Section from './Section'
 import { useSpotlight } from '../hooks/useSpotlight'
-import { about, profile } from '../data/content'
 
-export default function About() {
+export default function About({ about, profile }) {
   const spotlight = useSpotlight()
 
   return (

@@ -2,7 +2,6 @@ import { useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ArrowUpRight, Code2 } from 'lucide-react'
 import Section from './Section'
-import { projects } from '../data/content'
 
 function TiltCard({ project, index }) {
   const ref = useRef(null)
@@ -118,12 +117,16 @@ function TiltCard({ project, index }) {
       >
         <a
           href={project.link}
+          data-analytics="project_demo"
+          data-project={project.title}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--fg)] transition-all group-hover:gap-2.5"
         >
           Demo <ArrowUpRight size={14} />
         </a>
         <a
           href={project.github}
+          data-analytics="project_github"
+          data-project={project.title}
           className="inline-flex items-center gap-1.5 text-sm text-[var(--fg-muted)] transition hover:text-[var(--fg)]"
         >
           <Code2 size={14} /> Código
@@ -133,7 +136,7 @@ function TiltCard({ project, index }) {
   )
 }
 
-export default function Projects() {
+export default function Projects({ projects }) {
   return (
     <Section
       id="projects"

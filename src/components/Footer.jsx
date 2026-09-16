@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion'
-import { profile } from '../data/content'
+import { useAnalytics } from '../analytics/AnalyticsProvider'
 
-export default function Footer() {
+export default function Footer({ profile }) {
   const year = new Date().getFullYear()
+  const { consent, setConsent } = useAnalytics()
 
   return (
     <footer className="relative z-10 border-t border-[var(--border)] pb-28 pt-12">
@@ -19,9 +20,7 @@ export default function Footer() {
             {profile.role} · {profile.location}
           </p>
         </motion.div>
-        <p className="text-xs text-[var(--fg-faint)]">
-          © {year} · React · Vite · Framer Motion · Dock glass
-        </p>
+        <div className="flex items-center gap-3 text-xs text-[var(--fg-faint)]"><p>© {year} · React · Vite · Framer Motion · Dock glass</p>{consent !== 'unknown' && navigator.doNotTrack !== '1' && <button type="button" onClick={() => setConsent(consent === 'granted' ? 'denied' : 'granted')} className="underline underline-offset-4 hover:text-[var(--fg)]">{consent === 'granted' ? 'Desactivar analítica' : 'Activar analítica'}</button>}</div>
       </div>
     </footer>
   )

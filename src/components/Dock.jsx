@@ -11,6 +11,7 @@ import {
   Home,
 } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
+import { useLocation } from 'react-router-dom'
 
 const items = [
   { id: 'top', href: '#top', label: 'Inicio', Icon: Home },
@@ -62,11 +63,10 @@ function DockIcon({ item, mouseX, active }) {
         aria-label={item.label}
       >
         <span
-          className={`flex h-full w-full items-center justify-center rounded-2xl border transition-colors duration-300 ${
-            active
+          className={`flex h-full w-full items-center justify-center rounded-2xl border transition-colors duration-300 ${active
               ? 'border-[var(--border-strong)] bg-[var(--fg)] text-[var(--accent-fg)] shadow-lg'
               : 'border-[var(--border)] bg-[var(--bg-card)]/80 text-[var(--fg)] hover:bg-[var(--bg-soft)]'
-          }`}
+            }`}
         >
           <item.Icon
             size={active ? 20 : 18}
@@ -86,7 +86,8 @@ function DockIcon({ item, mouseX, active }) {
   )
 }
 
-export default function Dock() {
+export default function Dock({ variant = 'floating', placement = 'bottom' }) {
+  const location = useLocation()
   const { theme, toggle } = useTheme()
   const mouseX = useMotionValue(Infinity)
   const [active, setActive] = useState('top')
@@ -119,23 +120,27 @@ export default function Dock() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const isTopOnDesktop = placement === 'responsive-top'
+  const position = isTopOnDesktop
+    ? 'bottom-5 md:bottom-auto md:top-7'
+    : 'bottom-5 md:bottom-7'
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: visible ? 0 : 90, opacity: visible ? 1 : 0.4 }}
       transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-      className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center px-4 md:bottom-7"
+      className={`pointer-events-none fixed inset-x-0 z-50 flex justify-center px-4 ${position}`}
     >
       <motion.nav
         onMouseMove={(e) => mouseX.set(e.pageX)}
         onMouseLeave={() => mouseX.set(Infinity)}
-        className="pointer-events-auto flex items-end gap-1.5 rounded-[1.75rem] glass-strong px-2.5 py-2 md:gap-2 md:px-3 md:py-2.5"
+        className={`pointer-events-auto flex items-end gap-1.5 rounded-[1.75rem] glass-strong px-2.5 py-2 md:gap-2 md:px-3 md:py-2.5 dock--${variant}`}
         aria-label="Navegación principal"
       >
         {items.map((item) => (
           <DockIcon
             key={item.id}
-            item={item}
+            item={{ ...item, href: location.pathname === '/' ? item.href : `/${item.href}` }}
             mouseX={mouseX}
             active={active === item.id}
           />

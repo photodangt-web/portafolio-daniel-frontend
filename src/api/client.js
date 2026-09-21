@@ -1,15 +1,21 @@
 import axios from 'axios'
 
-const FALLBACK_API_URL = 'http://localhost:7070/api/v1'
-const URL_BASE = globalThis.location?.origin || new URL(FALLBACK_API_URL).origin
+const LOCAL_API_URL = 'http://localhost:7070/api/v1'
+const PROD_API_URL = 'https://apiportafolio.lionsoftgt.site/api/v1'
+
+function isLocalHost() {
+  const host = globalThis.location?.hostname
+  return host === 'localhost' || host === '127.0.0.1'
+}
 
 function getApiUrl() {
   const configuredUrl = import.meta.env.VITE_API_URL?.trim()
+  const fallback = isLocalHost() ? LOCAL_API_URL : PROD_API_URL
 
   try {
-    return new URL(configuredUrl || FALLBACK_API_URL, URL_BASE).toString().replace(/\/$/, '')
+    return new URL(configuredUrl || fallback).toString().replace(/\/$/, '')
   } catch {
-    return FALLBACK_API_URL
+    return fallback
   }
 }
 

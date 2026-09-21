@@ -1522,18 +1522,73 @@ body {
   .project-columns.is-2,
   .project-columns.is-3,
   .project-columns.is-4 { grid-template-columns: 1fr; }
-  .project-film-stage { grid-template-columns: 1fr; }
+  .project-film,
+  .project-mosaic {
+    width: 100%;
+    min-height: 100svh;
+    padding: 4.5rem .7rem 5.75rem;
+  }
+  .project-film-stage {
+    grid-template-columns: 1fr;
+    min-height: calc(100svh - 10rem);
+  }
   .project-film-card.is-prev, .project-film-card.is-next { display: none; }
-  .project-mosaic { grid-template-columns: 1fr 1fr; grid-auto-rows: 8rem; }
-  .project-mosaic-card.is-1 { grid-column: span 2; }
+  .project-film-card img,
+  .project-film-card .project-media-fallback {
+    aspect-ratio: auto;
+    height: min(78svh, calc(100svh - 11rem));
+    object-fit: cover;
+  }
+  .project-mosaic {
+    grid-template-columns: 1fr;
+    grid-auto-rows: min(56svh, 24rem);
+  }
+  .project-mosaic-card.is-1,
+  .project-mosaic-card.is-2,
+  .project-mosaic-card.is-3,
+  .project-mosaic-card.is-4,
+  .project-mosaic-card.is-5 { grid-column: span 1; grid-row: span 1; }
+  .project-thumbs {
+    width: 100%;
+    min-height: 100svh;
+    padding: 4.25rem .55rem 5.5rem;
+  }
+  .project-thumbs-stage {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .project-thumbs-stage > .project-thumbs-arrow {
+    position: absolute;
+    top: 36%;
+    z-index: 3;
+    transform: translateY(-50%);
+  }
+  .project-thumbs-stage > .project-thumbs-arrow:first-child { left: .35rem; }
+  .project-thumbs-stage > .project-thumbs-arrow:last-child { right: .35rem; }
+  .project-thumbs-frame {
+    aspect-ratio: auto;
+    height: min(74svh, calc(100svh - 12rem));
+    border-radius: 1.1rem;
+  }
+  .project-thumbs-row button { flex-basis: 5.8rem; }
 }
 @media (max-width: 720px) {
   .project-progress { display: none; }
   .project-cover-copy { padding: 5rem 1.25rem 6.5rem; }
   .project-slide-grid { padding: 5.25rem 1.5rem 4.5rem; }
   .project-hero-split-copy { padding: 5.5rem 1.25rem 6rem; }
-  .project-stack-stage { width: min(88vw, 30rem); }
-  .project-stack-pin { padding: 4.25rem 1rem 5.25rem; }
+  .project-stack-stage {
+    width: calc(100vw - 1.25rem);
+    max-width: none;
+    aspect-ratio: 4 / 5;
+  }
+  .project-stack-pin { padding: 4rem .5rem 5rem; }
+  .project-stack--static {
+    max-width: none;
+    width: 100%;
+    padding: 4rem .7rem 5rem;
+  }
+  .project-stack--static .project-stack-card { min-height: 70svh; }
   .project-slide-nav { width: min(22rem, calc(100% - 1.5rem)); gap: .75rem; }
   .project-nav-prev,
   .project-nav-next { padding: .75rem 1.05rem; font-size: .82rem; }

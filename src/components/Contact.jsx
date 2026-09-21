@@ -234,13 +234,9 @@ export default function Contact({ profile, header }) {
                 >
                   <CheckCircle2 size={40} className="text-[var(--fg)]" />
                 </motion.div>
-                <p className="mt-4 text-lg font-semibold text-[var(--fg)]">Mensaje listo</p>
+                <p className="mt-4 text-lg font-semibold text-[var(--fg)]">Mensaje enviado</p>
                 <p className="mt-2 max-w-sm text-sm text-[var(--fg-muted)]">
-                  Simulación OK. Conecta Formspree o tu API en{' '}
-                  <code className="rounded bg-[var(--bg-soft)] px-1 text-[11px]">
-                    Contact.jsx
-                  </code>
-                  .
+                  Gracias. Te responderé pronto.
                 </p>
                 <button
                   type="button"

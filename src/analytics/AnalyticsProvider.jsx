@@ -31,6 +31,7 @@ function pageName(path) {
   if (path === '/') return 'Inicio'
   if (path === '/blog') return 'Blog'
   if (path.startsWith('/blog/')) return 'Artículo'
+  if (path.startsWith('/proyectos/') || path.startsWith('/projects/')) return 'Proyecto'
   return path
 }
 

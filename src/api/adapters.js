@@ -17,12 +17,23 @@ function formatPeriod({ startDate, endDate, current }) {
   return [start, end].filter(Boolean).join(' — ')
 }
 
+function adaptSocialLink(link) {
+  return {
+    platform: link.platform,
+    url: link.url,
+    icon: link.icon || '',
+    iconKind: link.iconKind || 'class',
+    iconSvg: link.iconSvg || '',
+    iconPosition: link.iconPosition === 'right' ? 'right' : 'left',
+    iconDisplay: ['icon', 'text', 'both'].includes(link.iconDisplay) ? link.iconDisplay : 'both',
+    buttonStyle: ['outline', 'filled', 'soft'].includes(link.buttonStyle) ? link.buttonStyle : 'outline',
+  }
+}
+
 export function adaptProfile(profile) {
-  const socials = Object.fromEntries(
-    (profile.socialLinks || [])
-      .filter(({ platform, url }) => platform && url)
-      .map(({ platform, url }) => [platform.toLowerCase(), url]),
-  )
+  const socials = (profile.socialLinks || [])
+    .filter(({ platform, url }) => platform && url)
+    .map(adaptSocialLink)
 
   return {
     name: profile.name,
@@ -41,6 +52,19 @@ export function adaptProfile(profile) {
   }
 }
 
+export function adaptSectionHeaders(headers) {
+  if (!Array.isArray(headers)) return {}
+
+  return Object.fromEntries(
+    headers
+      .filter(({ section }) => section)
+      .map(({ section, eyebrow, title, description }) => [
+        section,
+        { eyebrow: eyebrow || '', title: title || '', description: description || '' },
+      ]),
+  )
+}
+
 export function adaptSkills(skills) {
   const categories = new Map()
 
@@ -52,7 +76,14 @@ export function adaptSkills(skills) {
 
     const title = String(skill?.category || 'Otros').trim() || 'Otros'
     const items = categories.get(title) || []
-    items.push(name)
+    items.push({
+      name,
+      icon: skill.icon || '',
+      iconKind: skill.iconKind || 'class',
+      iconSvg: skill.iconSvg || '',
+      iconPosition: skill.iconPosition === 'right' ? 'right' : 'left',
+      iconDisplay: ['icon', 'text', 'both'].includes(skill.iconDisplay) ? skill.iconDisplay : 'both',
+    })
     categories.set(title, items)
   })
 
@@ -73,6 +104,8 @@ export function adaptExperience(experience) {
 export function adaptProjects(projects) {
   return projects.map((project) => ({
     title: project.title,
+    slug: project.slug,
+    tagline: project.tagline || '',
     description: project.summary || project.content || '',
     tags: project.technologies || [],
     year: formatDate(project.createdAt)?.slice(-4) || '',
@@ -80,5 +113,7 @@ export function adaptProjects(projects) {
     github: project.repositoryUrl || '#',
     featured: Boolean(project.featured),
     coverImage: resolveMediaUrl(project.coverImage),
+    gallery: (project.gallery || []).map(resolveMediaUrl),
+    slides: project.slides || [],
   }))
 }

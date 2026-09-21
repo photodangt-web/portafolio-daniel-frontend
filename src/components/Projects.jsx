@@ -1,7 +1,9 @@
 import { useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { ArrowUpRight, Code2 } from 'lucide-react'
 import Section from './Section'
+import SafeImage from '../projects/SafeImage'
 
 function TiltCard({ project, index }) {
   const ref = useRef(null)
@@ -30,6 +32,8 @@ function TiltCard({ project, index }) {
     mx.set(0)
     my.set(0)
   }
+
+  const previewImage = project.coverImage || project.gallery?.[0]
 
   return (
     <motion.article
@@ -73,28 +77,20 @@ function TiltCard({ project, index }) {
         </span>
       </div>
 
-      {/* abstract preview block — unique visual, not stock image */}
-      <div
+      <Link
+        to={project.slug ? `/proyectos/${project.slug}` : '#'}
+        aria-label={`Abrir recorrido de ${project.title}`}
         className="relative mb-5 h-36 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-soft)]"
         style={{ transform: 'translateZ(16px)' }}
       >
-        <div className="absolute inset-0 opacity-80"
-          style={{
-            background: `
-              radial-gradient(circle at 20% 30%, var(--fg) 0%, transparent 28%),
-              radial-gradient(circle at 80% 70%, var(--fg-faint) 0%, transparent 32%),
-              linear-gradient(135deg, transparent 40%, var(--border) 40%, var(--border) 41%, transparent 41%),
-              linear-gradient(45deg, transparent 60%, var(--border) 60%, var(--border) 61%, transparent 61%)
-            `,
-            opacity: 0.15,
-          }}
-        />
+        {previewImage ? <SafeImage src={previewImage} alt={project.title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="absolute inset-0 opacity-80" style={{ background: `radial-gradient(circle at 20% 30%, var(--fg) 0%, transparent 28%), radial-gradient(circle at 80% 70%, var(--fg-faint) 0%, transparent 32%), linear-gradient(135deg, transparent 40%, var(--border) 40%, var(--border) 41%, transparent 41%)`, opacity: 0.15 }} />}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/10 opacity-70" />
         <div className="absolute bottom-3 left-3 right-3 flex gap-1.5">
           <span className="h-1.5 flex-1 rounded-full bg-[var(--fg)]/20" />
           <span className="h-1.5 w-1/3 rounded-full bg-[var(--fg)]/10" />
         </div>
         <div className="absolute right-3 top-3 h-8 w-8 rounded-lg border border-[var(--border)] bg-[var(--bg-card)]/80 backdrop-blur" />
-      </div>
+      </Link>
 
       <p className="flex-1 text-sm leading-relaxed text-[var(--fg-muted)]">
         {project.description}
@@ -115,14 +111,14 @@ function TiltCard({ project, index }) {
         className="mt-6 flex items-center gap-5 border-t border-[var(--border)] pt-4"
         style={{ transform: 'translateZ(20px)' }}
       >
-        <a
-          href={project.link}
+        <Link
+          to={project.slug ? `/proyectos/${project.slug}` : '#'}
           data-analytics="project_demo"
           data-project={project.title}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--fg)] transition-all group-hover:gap-2.5"
         >
-          Demo <ArrowUpRight size={14} />
-        </a>
+          Recorrido <ArrowUpRight size={14} />
+        </Link>
         <a
           href={project.github}
           data-analytics="project_github"
@@ -136,13 +132,13 @@ function TiltCard({ project, index }) {
   )
 }
 
-export default function Projects({ projects }) {
+export default function Projects({ projects, header }) {
   return (
     <Section
       id="projects"
-      eyebrow="Portafolio"
-      title="Proyectos en 3D sutil"
-      description="Cards con tilt al cursor y spotlight — reemplaza demos y repos por los tuyos."
+      eyebrow={header.eyebrow}
+      title={header.title}
+      description={header.description}
     >
       <div className="grid gap-4 md:grid-cols-2" style={{ perspective: 1200 }}>
         {projects.map((project, i) => (

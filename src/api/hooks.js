@@ -21,3 +21,11 @@ export function useExperienceQuery() {
 export function useProjectsQuery() {
   return useQuery({ queryKey: ['projects'], queryFn: portfolioApi.getProjects, ...queryOptions })
 }
+
+export function useSectionHeadersQuery() {
+  return useQuery({ queryKey: ['section-headers'], queryFn: portfolioApi.getSectionHeaders, ...queryOptions })
+}
+
+export function useLeadFieldsQuery() {
+  return useQuery({ queryKey: ['lead-fields'], queryFn: portfolioApi.getLeadFields, ...queryOptions })
+}

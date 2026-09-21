@@ -3,20 +3,89 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle2, Mail } from 'lucide-react'
 import Section from './Section'
 import Magnetic from './Magnetic'
+import SkillIcon from './SkillIcon'
+import { portfolioApi } from '../api/portfolio'
+import { notifyTelegramLead } from '../api/telegram'
+import { useLeadFieldsQuery } from '../api/hooks'
 
-export default function Contact({ profile }) {
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  })
+function normalizeSocials(socials) {
+  if (Array.isArray(socials)) return socials.filter((item) => item?.url)
+  if (socials && typeof socials === 'object') {
+    return Object.entries(socials).map(([platform, url]) => ({
+      platform,
+      url,
+      iconDisplay: 'text',
+      iconPosition: 'left',
+      buttonStyle: 'outline',
+    }))
+  }
+  return []
+}
+
+function ContactChip({ item, index }) {
+  const [wide, setWide] = useState(false)
+  const display = item.iconDisplay || 'both'
+  const showIcon = display !== 'text'
+  const showText = display !== 'icon'
+  const iconOnly = display === 'icon'
+  const style = ['outline', 'filled', 'soft'].includes(item.buttonStyle) ? item.buttonStyle : 'outline'
+  const position = item.iconPosition === 'right' ? 'right' : 'left'
+  const skill = {
+    name: item.platform,
+    icon: item.icon,
+    iconKind: item.iconKind || 'class',
+    iconSvg: item.iconSvg,
+    iconPosition: position,
+    iconDisplay: display,
+  }
+
+  return (
+    <motion.a
+      href={item.url}
+      data-analytics={`social_${String(item.platform || '').toLowerCase()}`}
+      target="_blank"
+      rel="noreferrer"
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.1 + index * 0.06 }}
+      whileHover={{ y: -4, scale: 1.04 }}
+      className={`contact-chip is-${style} ${position === 'right' ? 'is-right' : 'is-left'} ${iconOnly ? 'is-icon-only' : ''} ${wide && iconOnly ? 'is-wide' : ''}`}
+    >
+      {showIcon && (
+        <SkillIcon
+          skill={skill}
+          className="skill-chip-icon"
+          onRatio={(ratio) => setWide(ratio > 1.35)}
+        />
+      )}
+      {showText && <span>{item.platform}</span>}
+    </motion.a>
+  )
+}
+
+const defaultFields = [
+  { name: 'name', label: 'Nombre', type: 'text', placeholder: 'Tu nombre', required: true },
+  { name: 'email', label: 'Email', type: 'email', placeholder: 'tu@email.com', required: true },
+  { name: 'subject', label: 'Asunto', type: 'text', placeholder: 'Proyecto, colaboración...', required: false },
+  { name: 'message', label: 'Mensaje', type: 'textarea', placeholder: 'Cuéntame sobre la idea...', required: true },
+]
+
+export default function Contact({ profile, header }) {
+  const fieldsQuery = useLeadFieldsQuery()
+  const fields = (fieldsQuery.data?.length ? fieldsQuery.data : defaultFields)
+    .filter((fieldConfig) => fieldConfig.visible !== false && fieldConfig.type !== 'button')
+  const [form, setForm] = useState({})
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [focused, setFocused] = useState(null)
 
   const onChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, type, value, checked, files } = e.target
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : type === 'file' ? Array.from(files || []) : value,
+    }))
     if (status !== 'idle') {
       setStatus('idle')
       setError('')
@@ -27,22 +96,74 @@ export default function Contact({ profile }) {
     e.preventDefault()
     setError('')
 
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      setStatus('error')
-      setError('Completa nombre, email y mensaje.')
-      return
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      setStatus('error')
-      setError('Ingresa un email válido.')
-      return
+    for (const fieldConfig of fields) {
+      const value = form[fieldConfig.name]
+      const empty = value === undefined || value === '' || (Array.isArray(value) && value.length === 0)
+      if (fieldConfig.required && empty) {
+        setStatus('error')
+        setError(`Completa ${fieldConfig.label}.`)
+        return
+      }
+      if (fieldConfig.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value))) {
+        setStatus('error')
+        setError(`Ingresa un email válido en ${fieldConfig.label}.`)
+        return
+      }
     }
 
     setStatus('loading')
-    // TODO: Formspree / API — ver comentario en versión anterior
-    await new Promise((r) => setTimeout(r, 1000))
-    setStatus('success')
-    setForm({ name: '', email: '', subject: '', message: '' })
+    const data = new FormData()
+    const values = {}
+    fields.forEach((fieldConfig) => {
+      const value = form[fieldConfig.name]
+      if (fieldConfig.type === 'file') {
+        ;(value || []).forEach((file) => data.append(fieldConfig.name, file))
+      } else if (value !== undefined && value !== '') {
+        values[fieldConfig.name] = value
+      }
+    })
+    data.append('values', JSON.stringify(values))
+
+    let serverOk = false
+    try {
+      await portfolioApi.submitLead(data)
+      serverOk = true
+    } catch {
+      serverOk = false
+    }
+
+    let telegramOk = false
+    try {
+      telegramOk = await notifyTelegramLead({ values, serverOk })
+    } catch {
+      telegramOk = false
+    }
+
+    if (serverOk || telegramOk) {
+      setStatus('success')
+      setForm({})
+      return
+    }
+    setStatus('error')
+    setError('No fue posible enviar el mensaje.')
+  }
+
+  function renderField(fieldConfig) {
+    const common = {
+      id: fieldConfig.name,
+      name: fieldConfig.name,
+      required: Boolean(fieldConfig.required),
+      onChange,
+      onFocus: () => setFocused(fieldConfig.name),
+      onBlur: () => setFocused(null),
+      className: fieldConfig.type === 'textarea' ? `${field} min-h-[130px] resize-y` : field,
+    }
+    if (fieldConfig.type === 'textarea') return <textarea {...common} rows={5} placeholder={fieldConfig.placeholder || ''} value={form[fieldConfig.name] || ''} />
+    if (fieldConfig.type === 'select') return <select {...common} value={form[fieldConfig.name] || ''}><option value="">Selecciona...</option>{(fieldConfig.options || []).map((option) => <option key={option} value={option}>{option}</option>)}</select>
+    if (fieldConfig.type === 'radio') return <div className="flex flex-wrap gap-3">{(fieldConfig.options || []).map((option) => <label key={option} className="inline-flex items-center gap-2 text-sm text-[var(--fg-muted)]"><input type="radio" name={fieldConfig.name} value={option} checked={form[fieldConfig.name] === option} onChange={onChange} />{option}</label>)}</div>
+    if (fieldConfig.type === 'checkbox') return <label className="inline-flex items-center gap-2 text-sm text-[var(--fg-muted)]"><input type="checkbox" name={fieldConfig.name} checked={Boolean(form[fieldConfig.name])} onChange={onChange} />{fieldConfig.placeholder || fieldConfig.label}</label>
+    if (fieldConfig.type === 'file') return <input {...common} type="file" multiple />
+    return <input {...common} type={fieldConfig.type === 'phone' ? 'tel' : fieldConfig.type === 'url' ? 'url' : fieldConfig.type} placeholder={fieldConfig.placeholder || ''} value={form[fieldConfig.name] || ''} />
   }
 
   const field =
@@ -51,9 +172,9 @@ export default function Contact({ profile }) {
   return (
     <Section
       id="contact"
-      eyebrow="Contacto"
-      title="Empecemos algo nuevo"
-      description="Formulario listo para cablear. Mientras tanto, simula el envío en el cliente."
+      eyebrow={header.eyebrow}
+      title={header.title}
+      description={header.description}
     >
       <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
         <motion.div
@@ -82,22 +203,8 @@ export default function Contact({ profile }) {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {Object.entries(profile.socials).map(([key, url], i) => (
-              <motion.a
-                key={key}
-                href={url}
-                data-analytics={`social_${key}`}
-                target="_blank"
-                rel="noreferrer"
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 + i * 0.06 }}
-                whileHover={{ y: -4, scale: 1.04 }}
-                className="rounded-full border border-[var(--border)] bg-[var(--bg-card)] px-4 py-2 text-xs font-medium capitalize text-[var(--fg-muted)] transition hover:text-[var(--fg)]"
-              >
-                {key}
-              </motion.a>
+            {normalizeSocials(profile.socials).map((item, index) => (
+              <ContactChip key={`${item.platform}-${index}`} item={item} index={index} />
             ))}
           </div>
         </motion.div>
@@ -152,27 +259,17 @@ export default function Contact({ profile }) {
                 className="space-y-4"
               >
                 <div className="grid gap-4 sm:grid-cols-2">
-                  {['name', 'email'].map((name) => (
-                    <div key={name} className="relative">
+                  {fields.map((fieldConfig) => (
+                    <div key={fieldConfig.name} className={fieldConfig.type === 'textarea' ? 'relative sm:col-span-2' : 'relative'}>
                       <label
-                        htmlFor={name}
+                        htmlFor={fieldConfig.name}
                         className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[var(--fg-faint)]"
                       >
-                        {name === 'name' ? 'Nombre' : 'Email'}
+                        {fieldConfig.label}{fieldConfig.required ? ' *' : ''}
                       </label>
-                      <input
-                        id={name}
-                        name={name}
-                        type={name === 'email' ? 'email' : 'text'}
-                        placeholder={name === 'name' ? 'Tu nombre' : 'tu@email.com'}
-                        value={form[name]}
-                        onChange={onChange}
-                        onFocus={() => setFocused(name)}
-                        onBlur={() => setFocused(null)}
-                        className={field}
-                      />
+                      {renderField(fieldConfig)}
                       <AnimatePresence>
-                        {focused === name && (
+                        {focused === fieldConfig.name && (
                           <motion.span
                             layoutId="field-glow"
                             className="pointer-events-none absolute inset-x-2 bottom-0 h-px bg-[var(--fg)]/30"
@@ -184,42 +281,6 @@ export default function Contact({ profile }) {
                       </AnimatePresence>
                     </div>
                   ))}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[var(--fg-faint)]"
-                  >
-                    Asunto
-                  </label>
-                  <input
-                    id="subject"
-                    name="subject"
-                    type="text"
-                    placeholder="Proyecto, colaboración…"
-                    value={form.subject}
-                    onChange={onChange}
-                    className={field}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[var(--fg-faint)]"
-                  >
-                    Mensaje
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    placeholder="Cuéntame sobre la idea…"
-                    value={form.message}
-                    onChange={onChange}
-                    className={`${field} min-h-[130px] resize-y`}
-                  />
                 </div>
 
                 {status === 'error' && (

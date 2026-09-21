@@ -32,6 +32,34 @@ export const about = {
   ],
 }
 
+export const sectionHeaders = {
+  about: {
+    eyebrow: 'Sobre mí',
+    title: 'Diseño en código. Productos que se sienten vivos.',
+    description: 'Más que un CV en una página: cómo pienso y construyo.',
+  },
+  skills: {
+    eyebrow: 'Skills',
+    title: 'Stack que uso de verdad',
+    description: 'No es una lista genérica: categorías con chips animados al estilo de un OS moderno.',
+  },
+  experience: {
+    eyebrow: 'Experiencia',
+    title: 'Trayectoria en capas',
+    description: 'Acordeón con layout animado — abre cada etapa para ver el detalle.',
+  },
+  projects: {
+    eyebrow: 'Portafolio',
+    title: 'Proyectos en 3D sutil',
+    description: 'Cards con tilt al cursor y spotlight — reemplaza demos y repos por los tuyos.',
+  },
+  contact: {
+    eyebrow: 'Contacto',
+    title: 'Empecemos algo nuevo',
+    description: 'Formulario listo para cablear. Mientras tanto, simula el envío en el cliente.',
+  },
+}
+
 export const skills = {
   categories: [
     {

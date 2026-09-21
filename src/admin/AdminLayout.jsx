@@ -12,7 +12,8 @@ export default function AdminLayout() {
   const [isOpen, setIsOpen] = useState(false)
   const activeItem = adminNavigation.find((item) => location.pathname.endsWith(item.path))
   const title = activeItem?.label || 'Resumen'
-  const groups = ['Contenido', 'Analítica']
+  const groups = ['Contenido', 'Leads', 'Analítica']
+  const isLeadsArea = location.pathname.startsWith('/admin/leads')
 
   async function handleLogout() {
     await signOut()
@@ -59,7 +60,7 @@ export default function AdminLayout() {
           </div>
           <div className="flex items-center gap-2"><button className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs font-medium text-[var(--fg-muted)] hover:bg-[var(--bg-soft)]" onClick={toggle}>{theme === 'dark' ? 'Tema claro' : 'Tema oscuro'}</button></div>
         </header>
-        <main className="mx-auto w-full max-w-6xl p-5 sm:p-8"><Outlet /></main>
+        <main className={`mx-auto w-full p-4 sm:p-6 ${isLeadsArea ? 'max-w-[1600px]' : 'max-w-6xl'}`}><Outlet /></main>
       </div>
     </div>
   )

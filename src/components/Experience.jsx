@@ -3,15 +3,15 @@ import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import Section from './Section'
 
-export default function Experience({ experience }) {
+export default function Experience({ experience, header }) {
   const [open, setOpen] = useState(0)
 
   return (
     <Section
       id="experience"
-      eyebrow="Experiencia"
-      title="Trayectoria en capas"
-      description="Acordeón con layout animado — abre cada etapa para ver el detalle."
+      eyebrow={header.eyebrow}
+      title={header.title}
+      description={header.description}
     >
       <LayoutGroup>
         <div className="space-y-3">

@@ -1,0 +1,619 @@
+{
+  "syncedAt": "2026-09-21T18:30:32.397Z",
+  "profile": {
+    "_id": "6a53cf538248d311405e8ca6",
+    "key": "profile",
+    "__v": 0,
+    "aboutParagraphs": [
+      "Soy una persona apasionado por ver como funcionan las cosas,  tengo más de 6 años de experiencia y siempre con la mentalidad de seguir aprendiendo con la intención de desarrollar proyectos únicos y funcionales con el fin de entregar siempre los resultados aún mejor de lo que se espera",
+      "Puntualmente me encanta decir que mi filosofía y práctica consiste en resolver problemas, ser creativo, armar arquitecturas que mantengan siempre los pilares importantes como lo es la seguridad, la escalabilidad, y buen rendimiento"
+    ],
+    "bio": "Desarrollador web con enfoque en experiencias de usuario y productos escalables.",
+    "email": "photodangt@gmail.com",
+    "headline": "Desarrollador / Programador",
+    "highlights": [
+      {
+        "label": "Años de experiencia",
+        "value": "7+"
+      },
+      {
+        "label": "Proyectos entregados",
+        "value": "120+"
+      },
+      {
+        "label": "Clientes",
+        "value": "45+"
+      }
+    ],
+    "location": "Guatemala",
+    "name": "Daniel de León",
+    "socialLinks": [
+      {
+        "iconKind": "class",
+        "iconPosition": "left",
+        "iconDisplay": "both",
+        "buttonStyle": "outline",
+        "platform": "github",
+        "url": "https://github.com/photodangt-web"
+      },
+      {
+        "iconKind": "class",
+        "iconPosition": "left",
+        "iconDisplay": "both",
+        "buttonStyle": "outline",
+        "platform": "linkedin",
+        "url": "https://www.linkedin.com/in/daniel-de-le%C3%B3n-0b142325a/"
+      },
+      {
+        "iconKind": "class",
+        "iconPosition": "left",
+        "iconDisplay": "both",
+        "buttonStyle": "outline",
+        "platform": "Agendar llamada",
+        "url": "https://cal.com/daniel-de-leon/entrevistas-laborales"
+      }
+    ],
+    "availability": "Disponible",
+    "avatar": "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010889/portfolio/l3sppbdcvpw8hlabq7su.png",
+    "resumeUrl": "https://example.com/cv.pdf",
+    "role": "Desarrollador Full Stack",
+    "tagline": "Innovando con modernización, seguridad, escalabilidad y optimización",
+    "heroConsole": "const dev = {\n  name: \"Daniel de León\",\n  stack: [\"React\", \"Vite\", \"Node\"],\n  openToWork: true,\n}"
+  },
+  "skills": [
+    {
+      "_id": "6a53db477b25c3ba70ebfc88",
+      "name": "Php",
+      "category": "Desarrollo Backend",
+      "level": 80,
+      "icon": "material-icon-theme:php",
+      "order": 0,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6a53dd377b25c3ba70ebfd08",
+      "name": "Python",
+      "category": "Desarrollo Backend",
+      "level": 60,
+      "icon": "logos:python",
+      "order": 1,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa2d8c1ba259a7e8ce833a",
+      "name": "TypeScript",
+      "category": "Desarrollo Backend",
+      "level": 70,
+      "icon": "material-icon-theme:typescript",
+      "order": 2,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa53a61ba259a7e8ce893e",
+      "name": "Laravel",
+      "category": "Desarrollo Backend",
+      "level": 65,
+      "icon": "logos:laravel",
+      "order": 3,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa54251ba259a7e8ce8998",
+      "name": "React",
+      "category": "Desarrollo Frontend",
+      "level": 80,
+      "icon": "devicon:react",
+      "order": 4,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa561b1ba259a7e8ce8ac8",
+      "name": "Next js",
+      "category": "Desarrollo Frontend",
+      "level": 70,
+      "icon": "cib:next-js",
+      "order": 5,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa562a1ba259a7e8ce8acc",
+      "name": "Vue js",
+      "category": "Desarrollo Frontend",
+      "level": 40,
+      "icon": "selfhst:vue-js",
+      "order": 6,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa564e1ba259a7e8ce8ae7",
+      "name": "Node js",
+      "category": "Desarrollo Backend",
+      "level": 70,
+      "icon": "selfhst:node-js",
+      "order": 7,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa599a0749897cc81ff540",
+      "name": "Kubernetes",
+      "category": "Herramientas & DevOps",
+      "level": 40,
+      "icon": "bxl:kubernetes",
+      "order": 8,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa59af0749897cc81ff558",
+      "name": "Argo CD",
+      "category": "Herramientas & DevOps",
+      "level": 60,
+      "icon": "devicon-plain:argocd",
+      "order": 9,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa59bc0749897cc81ff55c",
+      "name": "Linux Ubuntu",
+      "category": "Herramientas & DevOps",
+      "level": 80,
+      "icon": "selfhst:ubuntu",
+      "order": 10,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa59cb0749897cc81ff560",
+      "name": "AWS",
+      "category": "Herramientas & DevOps",
+      "level": 60,
+      "icon": "logos:aws",
+      "order": 11,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa59da0749897cc81ff577",
+      "name": "Docker",
+      "category": "Herramientas & DevOps",
+      "level": 80,
+      "icon": "logos:docker-icon",
+      "order": 12,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa59ee0749897cc81ff58e",
+      "name": "GitHub",
+      "category": "Herramientas & DevOps",
+      "level": 80,
+      "icon": "akar-icons:github-fill",
+      "order": 13,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5a030749897cc81ff592",
+      "name": "Vercel",
+      "category": "Herramientas & DevOps",
+      "level": 80,
+      "icon": "akar-icons:vercel-fill",
+      "order": 14,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5a0b0749897cc81ff596",
+      "name": "FIgma",
+      "category": "Herramientas & DevOps",
+      "level": 80,
+      "icon": "devicon:figma",
+      "order": 15,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5a260749897cc81ff5ae",
+      "name": "Cloudflare",
+      "category": "Herramientas & DevOps",
+      "level": 80,
+      "icon": "logos:cloudflare-icon",
+      "order": 16,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5a300749897cc81ff5b2",
+      "name": "VsCode",
+      "category": "Herramientas & DevOps",
+      "level": 80,
+      "icon": "devicon:vscode",
+      "order": 17,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5a4e0749897cc81ff5c9",
+      "name": "JavaScript",
+      "category": "Desarrollo Backend",
+      "level": 80,
+      "icon": "material-icon-theme:javascript",
+      "order": 18,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5a8d0749897cc81ff5e5",
+      "name": "codeigniter",
+      "category": "Desarrollo Backend",
+      "level": 30,
+      "icon": "logos:codeigniter-icon",
+      "order": 19,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5aa60749897cc81ff5fc",
+      "name": "Nest JS",
+      "category": "Desarrollo Backend",
+      "level": 60,
+      "icon": "material-icon-theme:nest",
+      "order": 20,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5ad60749897cc81ff616",
+      "name": "Scala",
+      "category": "Desarrollo Backend",
+      "level": 20,
+      "icon": "devicon:scala",
+      "order": 21,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5aea0749897cc81ff61b",
+      "name": "Ruby",
+      "category": "Desarrollo Backend",
+      "level": 20,
+      "icon": "logos:ruby",
+      "order": 22,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5aff0749897cc81ff632",
+      "name": "Angular",
+      "category": "Desarrollo Frontend",
+      "level": 20,
+      "icon": "material-icon-theme:angular",
+      "order": 23,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5b1c0749897cc81ff63a",
+      "name": "HTML",
+      "category": "Desarrollo Frontend",
+      "level": 80,
+      "icon": "material-icon-theme:html",
+      "order": 25,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5b310749897cc81ff653",
+      "name": "CSS",
+      "category": "Desarrollo Frontend",
+      "level": 80,
+      "icon": "skill-icons:css",
+      "order": 26,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5b340749897cc81ff657",
+      "name": "SCSS",
+      "category": "Desarrollo Frontend",
+      "level": 80,
+      "icon": "vscode-icons:file-type-scss",
+      "order": 27,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    },
+    {
+      "_id": "6aaa5b4c0749897cc81ff670",
+      "name": "Astro",
+      "category": "Desarrollo Frontend",
+      "level": 40,
+      "icon": "devicon-plain:astro",
+      "order": 28,
+      "__v": 0,
+      "iconDisplay": "both",
+      "iconKind": "class",
+      "iconPosition": "left"
+    }
+  ],
+  "experience": [
+    {
+      "_id": "6aaa9aacfdf4f675254120e0",
+      "role": "Desarrollador web",
+      "company": "School Media",
+      "location": "Guateemala",
+      "startDate": "2020-02-10T00:00:00.000Z",
+      "endDate": "2020-11-17T00:00:00.000Z",
+      "current": false,
+      "description": "",
+      "highlights": [
+        "Plataforma educativa",
+        "Sitio Web",
+        "Plataforma para aloamiento de videos"
+      ],
+      "technologies": [
+        "moodle",
+        "php",
+        "html",
+        "css",
+        "Digital ocena",
+        "linux"
+      ],
+      "order": 2,
+      "createdAt": "2026-09-16T13:33:32.248Z",
+      "updatedAt": "2026-09-16T13:33:32.248Z",
+      "__v": 0
+    },
+    {
+      "_id": "6aaa9b31fdf4f67525412101",
+      "role": "Jefe de operaciones",
+      "company": "Wiinet",
+      "location": "Esquipulas",
+      "startDate": "2021-02-17T00:00:00.000Z",
+      "endDate": "2021-11-22T00:00:00.000Z",
+      "current": false,
+      "description": "",
+      "highlights": [
+        "Sistema para gestión de Red",
+        "Líder de equipo para armado de arquitecturas de Red"
+      ],
+      "technologies": [
+        "Linux",
+        "php",
+        "SQL"
+      ],
+      "order": 4,
+      "createdAt": "2026-09-16T13:35:45.788Z",
+      "updatedAt": "2026-09-16T13:35:45.788Z",
+      "__v": 0
+    },
+    {
+      "_id": "6aaa9b8dfdf4f67525412107",
+      "role": "Desarrollador Fullstack",
+      "company": "Troiatec",
+      "location": "Cd. Guatemala",
+      "startDate": "2022-06-15T00:00:00.000Z",
+      "current": true,
+      "description": "",
+      "highlights": [
+        "Saas para estudios de neuromarketing - Analzyer",
+        "Saas para geodata y movilidad, Movidata"
+      ],
+      "technologies": [
+        "Linux",
+        "php",
+        "SQL"
+      ],
+      "order": 5,
+      "createdAt": "2026-09-16T13:37:17.602Z",
+      "updatedAt": "2026-09-16T13:37:17.602Z",
+      "__v": 0
+    }
+  ],
+  "projects": [
+    {
+      "_id": "6aaa63410749897cc81ff7c7",
+      "title": "Analyzer",
+      "slug": "prueba",
+      "summary": "Aplicación SAAS para realizar análisis de imágenes mediante estudios de neurociencia aplicada al neuromarketing",
+      "content": "fdfdf",
+      "category": "desarrollo",
+      "technologies": [
+        "react",
+        "php"
+      ],
+      "status": "published",
+      "featured": true,
+      "coverImage": "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010885/portfolio/f9gvu6ifwhqlx2qr4ykb.png",
+      "gallery": [
+        "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010885/portfolio/f9gvu6ifwhqlx2qr4ykb.png",
+        "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010885/portfolio/f9gvu6ifwhqlx2qr4ykb.png",
+        "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010889/portfolio/l3sppbdcvpw8hlabq7su.png"
+      ],
+      "repositoryUrl": "https://github.com/photodangt-web/portafolio-daniel-frontend",
+      "seoTitle": "prueba",
+      "seoDescription": "fdfdf",
+      "seoKeywords": [
+        "devops"
+      ],
+      "order": 0,
+      "__v": 0,
+      "slides": [
+        {
+          "id": "99ec2316-d393-4a81-b6b0-fbae6e34904b",
+          "blocks": [
+            {
+              "id": "b763efe0-386d-4739-977e-f5511f7e743a",
+              "type": "heading",
+              "level": 2,
+              "text": "Problema"
+            },
+            {
+              "id": "6bb3d580-9256-482b-9700-f45c55a9aa9c",
+              "type": "paragraph",
+              "text": "El cliente necesitaba mejorar una aplicación ya existente construida en React js"
+            }
+          ]
+        },
+        {
+          "id": "ce548227-800d-4071-ac23-1ae48f0afb48",
+          "blocks": [
+            {
+              "id": "b1a836b2-0d5e-424c-8985-6f77d44bab1e",
+              "type": "heading",
+              "level": 2,
+              "text": "¿Cómo se resolvió?"
+            },
+            {
+              "id": "c53537bf-e7f6-4c6d-a633-c2686348d8f8",
+              "type": "paragraph",
+              "text": "Se aplicaron mejoras utral modernas y rápidas a modo de contremplar un buen ejemplo"
+            }
+          ]
+        },
+        {
+          "id": "7cc0a671-f683-4d52-ba53-c00dd9e10e4a",
+          "blocks": [
+            {
+              "id": "f37fe75c-e969-4813-951e-6928453e8e3b",
+              "type": "gallery",
+              "images": [
+                "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010889/portfolio/l3sppbdcvpw8hlabq7su.png",
+                "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010885/portfolio/f9gvu6ifwhqlx2qr4ykb.png",
+                "https://res.cloudinary.com/dwqot0kqh/image/upload/v1790010884/portfolio/qkevx3xlagjqieqsmvya.png"
+              ],
+              "alt": "",
+              "layout": "thumbs"
+            }
+          ]
+        },
+        {
+          "id": "a379263b-d6a4-4828-8d9e-f81951d507c0",
+          "blocks": [
+            {
+              "id": "b4695633-441b-4559-8cb1-380b8c8ab8a0",
+              "type": "markdown",
+              "text": "# saludos amigo\nEsta es una pequeña prueba a ver que tal \n\nhola\n \n\n \n\n| prueba | prueba dos | prueba tres |\n| --- | --- |--- |\n| 1 | 2 |  4 |\n| 1 | 2 |  4 |\n| 1 | 2 |  4 |\n\n \n\n```js\nconst ready = true\n```\n\n\n> Ejemplo de Cita para ver si esto realmente fuinciona"
+            }
+          ]
+        }
+      ],
+      "tagline": "Aplicación web para estudios de Neuromarketing",
+      "id": "6aaa63410749897cc81ff7c7"
+    }
+  ],
+  "sectionHeaders": [
+    {
+      "_id": "6aaa7183bef82757c9bf96a9",
+      "section": "about",
+      "__v": 0,
+      "createdAt": "2026-09-16T10:37:55.692Z",
+      "description": "Bus la entrega de resultados esperados, dando el plus de brindar un entregable creativo, funcional e innovador",
+      "eyebrow": "Sobre mí",
+      "title": "Desarrollador FullStack",
+      "updatedAt": "2026-09-16T13:26:12.460Z"
+    },
+    {
+      "_id": "6aaa9bb9bef82757c9bf96ab",
+      "section": "contact",
+      "__v": 0,
+      "createdAt": "2026-09-16T13:38:01.446Z",
+      "description": "Envía ahora tu consulta o ponte en contacto para más información",
+      "eyebrow": "Contacto",
+      "title": "Platicamos?",
+      "updatedAt": "2026-09-16T13:38:01.446Z"
+    },
+    {
+      "_id": "6aaa6faebef82757c9bf96a8",
+      "section": "experience",
+      "__v": 0,
+      "createdAt": "2026-09-16T10:30:06.444Z",
+      "description": "Colaborando en más de 7 empresas a nivel nacional como internacional",
+      "eyebrow": "Experiencia",
+      "title": "Experiencia Laboral",
+      "updatedAt": "2026-09-16T13:30:54.874Z"
+    },
+    {
+      "_id": "6aaa7360bef82757c9bf96aa",
+      "section": "projects",
+      "__v": 0,
+      "createdAt": "2026-09-16T10:45:52.619Z",
+      "description": "Una muestra de lo que ya he logrado",
+      "eyebrow": "Portafolio",
+      "title": "Proyectos trabajados",
+      "updatedAt": "2026-09-16T10:48:26.891Z"
+    },
+    {
+      "_id": "6aaa6efabef82757c9bf96a7",
+      "section": "skills",
+      "__v": 0,
+      "createdAt": "2026-09-16T10:27:06.687Z",
+      "description": "Soy de los que elige la Tecnología ideal para proyectos escalables, óptimos y de buen rendimiento",
+      "eyebrow": "Skills",
+      "title": "Stack de Habilidades",
+      "updatedAt": "2026-09-16T10:34:54.459Z"
+    }
+  ]
+}

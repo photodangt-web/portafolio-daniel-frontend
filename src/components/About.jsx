@@ -2,15 +2,15 @@ import { motion } from 'framer-motion'
 import Section from './Section'
 import { useSpotlight } from '../hooks/useSpotlight'
 
-export default function About({ about, profile }) {
+export default function About({ about, profile, header }) {
   const spotlight = useSpotlight()
 
   return (
     <Section
       id="about"
-      eyebrow="Sobre mí"
-      title="Diseño en código. Productos que se sienten vivos."
-      description="Más que un CV en una página: cómo pienso y construyo."
+      eyebrow={header.eyebrow}
+      title={header.title}
+      description={header.description}
     >
       {/* Bento: bio + 2×2 stats */}
       <div className="grid gap-4 lg:grid-cols-12">

@@ -69,11 +69,10 @@ function usePageMeta({ title, description, image }) {
 }
 
 const coverFade = {
-  hidden: { opacity: 0, y: 32, filter: 'blur(10px)' },
+  hidden: { opacity: 0, y: 22 },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 0.75, delay: 0.28 + i * 0.1, ease: [0.16, 1, 0.3, 1] },
   }),
 }

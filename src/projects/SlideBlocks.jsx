@@ -9,8 +9,8 @@ import { resolveMediaUrl } from '../api/client'
 import { Reveal } from './Sweep'
 
 const fadeSlow = (show, delay = 0) => ({
-  initial: { opacity: 0, filter: 'blur(12px)' },
-  animate: show ? { opacity: 1, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(8px)' },
+  initial: { opacity: 0, y: 14 },
+  animate: show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 },
   transition: { duration: show ? 1.05 : 0.3, delay: show ? delay : 0, ease: [0.16, 1, 0.3, 1] },
 })
 

@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
 
 const header = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(8px)' },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
   },
 }

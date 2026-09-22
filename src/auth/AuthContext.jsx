@@ -9,27 +9,40 @@ function hasAdminRole(user) {
   return roles.some((role) => String(role).toLowerCase() === 'admin')
 }
 
+function needsAuthRestore() {
+  const path = window.location.pathname
+  return path.startsWith('/admin') || path.startsWith('/login')
+}
+
 export function AuthProvider({ children }) {
   const queryClient = useQueryClient()
   const [user, setUser] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(needsAuthRestore())
 
-  const clearSession = useCallback(() => {
+  const endSession = useCallback(() => {
     authApi.clearAccessToken()
     setUser(null)
-    queryClient.clear()
-  }, [queryClient])
+  }, [])
+
+  const clearSession = useCallback(() => {
+    endSession()
+    queryClient.removeQueries({ queryKey: ['admin'] })
+  }, [endSession, queryClient])
 
   useEffect(() => {
     configureAuthRetry({
       getAccessToken: authApi.getAccessToken,
       refreshAccessToken: authApi.refreshAccessToken,
-      onSessionExpired: clearSession,
+      onSessionExpired: endSession,
     })
 
     async function restoreSession() {
+      if (!needsAuthRestore()) {
+        setIsLoading(false)
+        return
+      }
+
       try {
-        // First honor a still-valid in-memory session, then use the rotating cookie.
         const currentUser = await authApi.getCurrentUser({ skipAuthRefresh: true })
         setUser(currentUser)
       } catch {
@@ -38,7 +51,7 @@ export function AuthProvider({ children }) {
           const currentUser = await authApi.getCurrentUser({ skipAuthRefresh: true })
           setUser(currentUser)
         } catch {
-          clearSession()
+          endSession()
         }
       } finally {
         setIsLoading(false)
@@ -46,7 +59,7 @@ export function AuthProvider({ children }) {
     }
 
     restoreSession()
-  }, [clearSession])
+  }, [endSession])
 
   async function signIn(credentials) {
     await authApi.login(credentials)

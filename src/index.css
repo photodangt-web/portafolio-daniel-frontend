@@ -147,15 +147,15 @@ body {
 /* Glass utilities */
 .glass {
   background: var(--bg-elevated);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border);
 }
 
 .glass-strong {
   background: var(--dock);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--dock-border);
   box-shadow: var(--dock-shadow);
 }
@@ -171,21 +171,23 @@ body {
 
 .atmosphere-mesh {
   position: absolute;
-  inset: -20%;
+  inset: -12%;
+  contain: paint;
+  transform: translateZ(0);
   background:
     radial-gradient(ellipse 60% 50% at 20% 20%, var(--mesh-1), transparent 55%),
     radial-gradient(ellipse 50% 40% at 80% 10%, var(--mesh-2), transparent 50%),
     radial-gradient(ellipse 45% 55% at 70% 80%, var(--mesh-3), transparent 55%),
     radial-gradient(ellipse 40% 40% at 10% 70%, var(--mesh-2), transparent 50%);
-  animation: mesh-drift 18s ease-in-out infinite alternate;
+  animation: mesh-drift 28s ease-in-out infinite alternate;
 }
 
 .atmosphere-noise {
   position: absolute;
   inset: 0;
   opacity: var(--noise-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px;
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 3px);
+  pointer-events: none;
 }
 
 @keyframes mesh-drift {
@@ -1019,7 +1021,7 @@ body {
   aspect-ratio: 4 / 5;
   object-fit: cover;
 }
-.project-film-card.is-prev, .project-film-card.is-next { opacity: .45; transform: scale(.92); }
+.project-film-card.is-prev, .project-film-card.is-next { opacity: .45; filter: blur(1px); transform: scale(.92); }
 .project-film-card.is-active { z-index: 2; box-shadow: 0 30px 70px -36px rgba(0,0,0,.45); }
 .project-film-card.is-active img { aspect-ratio: 4 / 5; }
 .project-film-dots {

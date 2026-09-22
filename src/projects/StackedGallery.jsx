@@ -58,8 +58,8 @@ function FilmGallery({ items, alt, open }) {
               className={`project-film-card is-zoomable ${role}`}
               onClick={() => (role === 'is-active' ? open(items, index) : setActive(index))}
               aria-label={role === 'is-active' ? `Ampliar ${alt} ${index + 1}` : `Ver ${alt} ${index + 1}`}
-              initial={reduced ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={reduced ? false : { opacity: 0, filter: 'blur(12px)' }}
+              animate={{ opacity: 1, filter: 'blur(0px)' }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
               <SafeImage src={items[index]} alt={`${alt} ${index + 1}`} />
@@ -219,8 +219,8 @@ function GridGallery({ items, alt, open }) {
           className={`project-mosaic-card is-zoomable is-${(index % 5) + 1}`}
           onClick={() => open(items, index)}
           aria-label={`Ampliar ${alt} ${index + 1}`}
-          initial={reduced ? false : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={reduced ? false : { opacity: 0, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, filter: 'blur(0px)' }}
           transition={{ duration: 1.05, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
         >
           <SafeImage src={src} alt={`${alt} ${index + 1}`} />

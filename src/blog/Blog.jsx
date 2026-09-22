@@ -40,8 +40,8 @@ function ArticleCard({ article, index, featured = false, reducedMotion }) {
 
   return (
     <motion.article
-      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 28, filter: 'blur(7px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       transition={{ duration: 0.6, delay: Math.min(index, 5) * 0.07, ease: [0.16, 1, 0.3, 1] }}
       className={featured ? 'blog-featured' : ''}
     >
@@ -109,7 +109,7 @@ export default function Blog() {
 
     <header className="blog-masthead">
       <motion.p initial={reducedMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.08 }} className="blog-eyebrow">Cuaderno de trabajo</motion.p>
-      <motion.h1 initial={reducedMotion ? false : { opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}>Ideas que<br /><em>merecen quedarse.</em></motion.h1>
+      <motion.h1 initial={reducedMotion ? false : { opacity: 0, y: 26, filter: 'blur(8px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 0.75, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}>Ideas que<br /><em>merecen quedarse.</em></motion.h1>
       <motion.p initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.26 }} className="blog-intro">Notas sobre interfaces, producto y el oficio de construir experiencias web que se sienten bien.</motion.p>
     </header>
 

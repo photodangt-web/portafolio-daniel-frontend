@@ -178,8 +178,8 @@ export default function Contact({ profile, header }) {
     >
       <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, x: -30, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
           viewport={{ once: true }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col gap-4"
@@ -211,8 +211,8 @@ export default function Contact({ profile, header }) {
 
         <motion.form
           onSubmit={onSubmit}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-[1.5rem] border border-[var(--border)] bg-[var(--bg-card)] p-6 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.2)] md:p-8"

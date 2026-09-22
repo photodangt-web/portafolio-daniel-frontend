@@ -27,12 +27,14 @@ function DockIcon({ item, mouseX, active }) {
   const [hovered, setHovered] = useState(false)
 
   const distance = useTransform(mouseX, (val) => {
-    const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 }
+    const node = ref.current
+    if (!node) return 0
+    const bounds = node.getBoundingClientRect()
     return val - bounds.x - bounds.width / 2
   })
 
-  const sizeSync = useTransform(distance, [-120, 0, 120], [44, 68, 44])
-  const size = useSpring(sizeSync, { mass: 0.15, stiffness: 220, damping: 14 })
+  const scaleSync = useTransform(distance, [-120, 0, 120], [1, 1.38, 1])
+  const scale = useSpring(scaleSync, { mass: 0.18, stiffness: 260, damping: 18 })
 
   return (
     <div
@@ -57,8 +59,8 @@ function DockIcon({ item, mouseX, active }) {
       <motion.a
         ref={ref}
         href={item.href}
-        style={{ width: size, height: size }}
-        className="dock-item relative flex items-center justify-center rounded-2xl"
+        style={{ scale }}
+        className="dock-item relative flex h-11 w-11 items-center justify-center rounded-2xl md:h-12 md:w-12"
         whileTap={{ scale: 0.88 }}
         aria-label={item.label}
       >
@@ -97,22 +99,27 @@ export default function Dock({ variant = 'floating', placement = 'bottom' }) {
   useEffect(() => {
     const sections = ['top', 'about', 'skills', 'experience', 'projects', 'contact']
 
+    let ticking = false
     const onScroll = () => {
-      const y = window.scrollY
-      // slight hide on fast scroll down (mac-like)
-      if (y > lastScroll.current + 40 && y > 200) setVisible(false)
-      else if (y < lastScroll.current - 10) setVisible(true)
-      lastScroll.current = y
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        ticking = false
+        const y = window.scrollY
+        if (y > lastScroll.current + 40 && y > 200) setVisible(false)
+        else if (y < lastScroll.current - 10) setVisible(true)
+        lastScroll.current = y
 
-      let current = 'top'
-      for (const id of sections) {
-        const el = document.getElementById(id)
-        if (!el) continue
-        if (el.getBoundingClientRect().top <= window.innerHeight * 0.35) {
-          current = id
+        let current = 'top'
+        for (const id of sections) {
+          const el = document.getElementById(id)
+          if (!el) continue
+          if (el.getBoundingClientRect().top <= window.innerHeight * 0.35) {
+            current = id
+          }
         }
-      }
-      setActive(current)
+        setActive(current)
+      })
     }
 
     onScroll()

@@ -16,8 +16,8 @@ export default function About({ about, profile, header }) {
       <div className="grid gap-4 lg:grid-cols-12">
         <motion.div
           {...spotlight}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="spotlight-card p-7 md:p-9 lg:col-span-7"

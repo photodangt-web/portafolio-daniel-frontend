@@ -6,8 +6,8 @@ export function Reveal({ show = true, delay = 0, children, className = '' }) {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 12 }}
-      animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+      initial={{ opacity: 0, filter: 'blur(10px)' }}
+      animate={show ? { opacity: 1, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(8px)' }}
       transition={{ duration: show ? 0.95 : 0.35, delay: show ? delay : 0, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
@@ -24,8 +24,8 @@ export function FadeWords({ text = '', show = true, delay = 0, as: Tag = 'p', cl
   if (tone !== 'title') {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+        initial={{ opacity: 0, filter: 'blur(8px)' }}
+        animate={show ? { opacity: 1, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(6px)' }}
         transition={{ duration: show ? 1.35 : 0.35, delay: show ? delay : 0, ease }}
       >
         <Tag className={className}>{text}</Tag>
@@ -39,8 +39,8 @@ export function FadeWords({ text = '', show = true, delay = 0, as: Tag = 'p', cl
         <motion.span
           key={`${word}-${index}`}
           className="project-fade-word"
-          initial={{ opacity: 0, y: 8 }}
-          animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+          initial={{ opacity: 0, filter: 'blur(10px)' }}
+          animate={show ? { opacity: 1, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(6px)' }}
           transition={{
             duration: show ? 1.25 : 0.35,
             delay: show ? delay + index * 0.11 : 0,

@@ -139,7 +139,7 @@ export default function Article() {
     <Link to="/blog" className="blog-back"><ArrowLeft size={15} /> <span>Todos los artículos</span></Link>
     <header className="article-hero">
       <motion.p initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }} className="blog-eyebrow">{category || 'Notas'}</motion.p>
-      <motion.h1 initial={reducedMotion ? false : { opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}>{item.title}</motion.h1>
+      <motion.h1 initial={reducedMotion ? false : { opacity: 0, y: 24, filter: 'blur(8px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 0.75, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}>{item.title}</motion.h1>
       {item.excerpt && <motion.p initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.17 }} className="article-dek">{item.excerpt}</motion.p>}
       <div className="article-meta"><span><CalendarDays size={15} /> <time dateTime={item.publishedAt}>{formatDate(item.publishedAt)}</time></span><i /><span><Clock3 size={15} /> {readingTime(item.content)} min de lectura</span></div>
       <div className="article-byline"><div className="article-author-avatar">{authorAvatar ? <img src={authorAvatar} alt="" /> : initials(authorName)}</div><div><span>Escrito por</span><strong>{authorName}</strong></div><ArticleActions item={item} metrics={metrics} onMetricsChange={setMetrics} /></div>

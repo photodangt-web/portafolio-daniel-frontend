@@ -20,7 +20,7 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)]">
+    <div className="font-admin min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       {isOpen && <button className="fixed inset-0 z-30 bg-black/30 lg:hidden" aria-label="Cerrar menú" onClick={() => setIsOpen(false)} />}
       <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-[var(--border)] bg-[var(--bg-card)] px-4 py-5 transition-transform duration-200 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-between px-2">

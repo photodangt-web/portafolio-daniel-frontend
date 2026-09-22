@@ -2,9 +2,52 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@font-face {
+  font-family: "Tomato Grotesk";
+  src: url("/fonts/TomatoGrotesk-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tomato Grotesk";
+  src: url("/fonts/TomatoGrotesk-BoldSlanted.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tomato Grotesk";
+  src: url("/fonts/TomatoGrotesk-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tomato Grotesk";
+  src: url("/fonts/TomatoGrotesk-ExtraBoldSlanted.otf") format("opentype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tomato Grotesk";
+  src: url("/fonts/TomatoGrotesk-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tomato Grotesk";
+  src: url("/fonts/TomatoGrotesk-BlackSlanted.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Tomato Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Tomato Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -69,12 +112,19 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: "Tomato Grotesk", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
   background: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.45s ease, color 0.45s ease;
+}
+
+.font-admin,
+.project-show {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-weight: 400;
 }
 
 .initial-loader {
@@ -353,7 +403,7 @@ body {
 
 .blog-masthead { max-width: 56rem; padding: clamp(5rem, 12vw, 9rem) 0 clamp(3.25rem, 7vw, 5rem); }
 .blog-masthead h1, .article-hero h1 { margin: .85rem 0 0; font-size: clamp(3.15rem, 9vw, 7.25rem); font-weight: 600; letter-spacing: -.065em; line-height: .91; }
-.blog-masthead h1 em { font-family: Georgia, "Times New Roman", serif; font-weight: 400; letter-spacing: -.075em; }
+.blog-masthead h1 em { font-family: "Tomato Grotesk", ui-sans-serif, sans-serif; font-style: italic; font-weight: 800; letter-spacing: -.075em; }
 .blog-intro { max-width: 34rem; margin-top: 2rem; font-size: 1.05rem; line-height: 1.75; color: var(--fg-muted); }
 
 .blog-filters { border-radius: 1.25rem; padding: .8rem; }

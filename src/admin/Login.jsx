@@ -39,7 +39,7 @@ export default function Login() {
   }
 
   return (
-    <main className="relative grid min-h-screen overflow-hidden bg-[var(--bg)] px-5 py-10 text-[var(--fg)] sm:place-items-center">
+    <main className="font-admin relative grid min-h-screen overflow-hidden bg-[var(--bg)] px-5 py-10 text-[var(--fg)] sm:place-items-center">
       <div className="absolute -left-32 top-0 h-80 w-80 rounded-full bg-[var(--mesh-2)] blur-3xl" />
       <div className="absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[var(--mesh-1)] blur-3xl" />
       <section className="relative w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--bg-elevated)] p-7 shadow-2xl backdrop-blur-xl sm:p-9">

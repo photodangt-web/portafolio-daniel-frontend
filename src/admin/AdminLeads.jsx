@@ -113,7 +113,7 @@ const leadStages = [
   { value: 'closed', label: 'Cerrado', tone: 'from-rose-500 to-red-600', description: 'Resultado final' },
 ]
 const leadPageMotion = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } }
-const leadRevealMotion = { hidden: { opacity: 0, y: 18, filter: 'blur(8px)' }, show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } } }
+const leadRevealMotion = { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } } }
 const leadStageMotion = { hidden: { opacity: 0, x: -18, scale: 0.96 }, show: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] } } }
 
 function stageIndex(status) { return Math.max(0, leadStages.findIndex((stage) => stage.value === status)) }

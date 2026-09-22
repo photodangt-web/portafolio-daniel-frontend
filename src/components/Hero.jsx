@@ -4,11 +4,10 @@ import Magnetic from './Magnetic'
 import HeroPhoto from './HeroPhoto'
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 32, filter: 'blur(10px)' },
+  hidden: { opacity: 0, y: 24 },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
       duration: 0.75,
       delay: 0.35 + i * 0.1,

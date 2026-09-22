@@ -1019,7 +1019,7 @@ body {
   aspect-ratio: 4 / 5;
   object-fit: cover;
 }
-.project-film-card.is-prev, .project-film-card.is-next { opacity: .45; filter: blur(1px); transform: scale(.92); }
+.project-film-card.is-prev, .project-film-card.is-next { opacity: .45; transform: scale(.92); }
 .project-film-card.is-active { z-index: 2; box-shadow: 0 30px 70px -36px rgba(0,0,0,.45); }
 .project-film-card.is-active img { aspect-ratio: 4 / 5; }
 .project-film-dots {

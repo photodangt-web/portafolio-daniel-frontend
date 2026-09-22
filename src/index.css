@@ -1719,24 +1719,13 @@ h1, h2, h3 {
   height: 1.1rem;
   flex-shrink: 0;
   color: currentColor;
-  filter: brightness(0);
   transition: filter .35s ease, width .35s ease, height .35s ease;
-}
-.dark .skill-chip-icon,
-.dark .skill-chip-svg,
-.dark .skill-chip-svg svg {
-  filter: brightness(0) invert(1);
 }
 .skill-chip.is-icon-only.is-wide .skill-chip-icon,
 .skill-chip.is-icon-only.is-wide .skill-chip-svg,
 .skill-chip.is-icon-only.is-wide .skill-chip-svg svg {
   width: 2.8rem;
   height: 1.15rem;
-}
-.skill-chip:hover .skill-chip-icon,
-.skill-chip:hover .skill-chip-svg,
-.skill-chip:hover .skill-chip-svg svg {
-  filter: none;
 }
 
 .contact-chip {
@@ -1785,22 +1774,4 @@ h1, h2, h3 {
 .contact-chip.is-soft:hover {
   background: var(--bg-card);
   box-shadow: 0 8px 20px -14px rgba(0,0,0,.45);
-}
-.contact-chip.is-filled .skill-chip-icon,
-.contact-chip.is-filled .skill-chip-svg,
-.contact-chip.is-filled .skill-chip-svg svg {
-  filter: brightness(0) invert(1);
-}
-.dark .contact-chip.is-filled .skill-chip-icon,
-.dark .contact-chip.is-filled .skill-chip-svg,
-.dark .contact-chip.is-filled .skill-chip-svg svg {
-  filter: brightness(0);
-}
-.contact-chip:hover .skill-chip-icon,
-.contact-chip:hover .skill-chip-svg,
-.contact-chip:hover .skill-chip-svg svg,
-.dark .contact-chip:hover .skill-chip-icon,
-.dark .contact-chip:hover .skill-chip-svg,
-.dark .contact-chip:hover .skill-chip-svg svg {
-  filter: none;
 }

@@ -3,6 +3,12 @@ import { MapPin, ArrowDownRight } from 'lucide-react'
 import Magnetic from './Magnetic'
 import HeroPhoto from './HeroPhoto'
 
+const heroButtonStyles = {
+  filled: 'bg-[var(--accent)] text-[var(--accent-fg)] shadow-lg',
+  outline: 'glass text-[var(--fg)] hover:border-[var(--border-strong)]',
+  soft: 'bg-[var(--bg-soft)] text-[var(--fg)] hover:bg-[var(--bg-card)]',
+}
+
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: (i = 0) => ({
@@ -51,7 +57,16 @@ function defaultHeroConsole(name) {
 }`
 }
 
+function defaultHeroButtons() {
+  return [
+    { label: 'Ver trabajo', href: '#projects', style: 'filled', openInNewTab: false },
+    { label: 'Contactar', href: '#contact', style: 'outline', openInNewTab: false },
+  ]
+}
+
 export default function Hero({ profile }) {
+  const buttons = profile.heroButtons?.length ? profile.heroButtons : defaultHeroButtons()
+
   return (
     <section
       id="top"
@@ -117,28 +132,30 @@ export default function Hero({ profile }) {
             animate="visible"
             className="mt-10 flex flex-wrap items-center gap-4"
           >
-            <Magnetic strength={0.4} radius={100}>
-              <a
-                href="#projects"
-                data-analytics="hero_projects"
-                className="group inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-7 py-3.5 text-sm font-medium text-[var(--accent-fg)] shadow-lg transition-transform"
-              >
-                Ver trabajo
-                <ArrowDownRight
-                  size={16}
-                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5"
-                />
-              </a>
-            </Magnetic>
-            <Magnetic strength={0.35} radius={90}>
-              <a
-                href="#contact"
-                data-analytics="hero_contact"
-                className="glass inline-flex items-center rounded-full px-7 py-3.5 text-sm font-medium text-[var(--fg)] transition hover:border-[var(--border-strong)]"
-              >
-                Contactar
-              </a>
-            </Magnetic>
+            {buttons.map((button, index) => {
+              const href = button.href || button.url || '#'
+              const external = button.openInNewTab || /^https?:\/\//i.test(href)
+              const style = heroButtonStyles[button.style] || heroButtonStyles.outline
+              return (
+                <Magnetic key={`${button.label}-${href}-${index}`} strength={index === 0 ? 0.4 : 0.35} radius={index === 0 ? 100 : 90}>
+                  <a
+                    href={href}
+                    target={button.openInNewTab ? '_blank' : undefined}
+                    rel={button.openInNewTab ? 'noreferrer' : undefined}
+                    data-analytics={external ? 'hero_outbound' : `hero_${href.replace(/^#/, '')}`}
+                    className={`group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium transition ${style}`}
+                  >
+                    {button.label}
+                    {index === 0 && (
+                      <ArrowDownRight
+                        size={16}
+                        className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+                      />
+                    )}
+                  </a>
+                </Magnetic>
+              )
+            })}
           </motion.div>
 
           <motion.div

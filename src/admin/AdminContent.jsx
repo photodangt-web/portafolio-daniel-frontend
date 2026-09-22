@@ -6,7 +6,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { adminApi } from '../api/admin'
-import { resolveMediaUrl } from '../api/client'
 import { sectionHeaders as defaultSectionHeaders } from '../data/content'
 import MediaPicker, { MediaLibrary as SharedMediaLibrary } from './MediaPicker'
 import AdminProjects from './AdminProjects'
@@ -39,7 +38,9 @@ function Field({ label, error, children }) {
   return <label className={labelClass}>{label}{children}{error && <span className="mt-1 block text-xs text-red-600 dark:text-red-400">{error.message}</span>}</label>
 }
 
-const profileSchema = z.object({ name: text(120, true), headline: text(160, true), role: text(120), tagline: text(300), heroConsole: text(3000), bio: text(3000, true), availability: text(240), location: text(120), email: z.string().email('Email no válido').optional().or(z.literal('')), avatar: z.string().optional(), resumeUrl: url, socialLinks: z.array(z.object({ platform: text(40, true), url: z.string().url('URL no válida').max(300), icon: text(2048), iconKind: z.enum(['class', 'svg-file', 'svg-paste', 'png']).optional(), iconSvg: z.string().max(20000).optional(), iconPosition: z.enum(['left', 'right']).optional(), iconDisplay: z.enum(['icon', 'text', 'both']).optional(), buttonStyle: z.enum(['outline', 'filled', 'soft']).optional() })), aboutParagraphs: z.array(z.object({ value: text(3000, true) })), highlights: z.array(z.object({ label: text(80, true), value: text(120, true) })) })
+const heroButtonSchema = z.object({ label: text(80, true), href: text(300, true), style: z.enum(['outline', 'filled', 'soft']).optional(), openInNewTab: z.boolean().optional() })
+const socialLinkSchema = z.object({ platform: text(40, true), url: z.string().url('URL no válida').max(300), icon: text(2048), iconKind: z.enum(['class', 'svg-file', 'svg-paste', 'png']).optional(), iconSvg: z.string().max(20000).optional(), iconPosition: z.enum(['left', 'right']).optional(), iconDisplay: z.enum(['icon', 'text', 'both']).optional(), buttonStyle: z.enum(['outline', 'filled', 'soft']).optional() })
+const profileSchema = z.object({ name: text(120, true), headline: text(160, true), role: text(120), tagline: text(300), heroConsole: text(3000), bio: text(3000, true), availability: text(240), location: text(120), email: z.string().email('Email no válido').optional().or(z.literal('')), avatar: z.string().optional(), resumeUrl: url, heroButtons: z.array(heroButtonSchema), socialLinks: z.array(socialLinkSchema), aboutParagraphs: z.array(z.object({ value: text(3000, true) })), highlights: z.array(z.object({ label: text(80, true), value: text(120, true) })) })
 function LegacyProfileEditor() {
   const client = useQueryClient(); const query = useQuery({ queryKey: ['admin', 'profile'], queryFn: adminApi.profile.get })
   const form = useForm({ resolver: zodResolver(profileSchema), defaultValues: { socialLinks: [], aboutParagraphs: [], highlights: [], sectionHeaders: defaultHeaderFields() } })
@@ -57,8 +58,9 @@ function ProfileEditor() {
   const query = useQuery({ queryKey: ['admin', 'profile'], queryFn: adminApi.profile.get })
   const form = useForm({
     resolver: zodResolver(profileSchema),
-    defaultValues: { socialLinks: [], aboutParagraphs: [], highlights: [] },
+    defaultValues: { heroButtons: [], socialLinks: [], aboutParagraphs: [], highlights: [] },
   })
+  const heroButtons = useFieldArray({ control: form.control, name: 'heroButtons' })
   const social = useFieldArray({ control: form.control, name: 'socialLinks' })
   const paragraphs = useFieldArray({ control: form.control, name: 'aboutParagraphs' })
   const highlights = useFieldArray({ control: form.control, name: 'highlights' })
@@ -67,6 +69,15 @@ function ProfileEditor() {
     if (!query.data) return
     form.reset({
       ...query.data,
+      heroButtons: (query.data.heroButtons?.length ? query.data.heroButtons : [
+        { label: 'Ver trabajo', href: '#projects', style: 'filled', openInNewTab: false },
+        { label: 'Contactar', href: '#contact', style: 'outline', openInNewTab: false },
+      ]).map((button) => ({
+        label: button.label || '',
+        href: button.href || button.url || '',
+        style: button.style || 'outline',
+        openInNewTab: Boolean(button.openInNewTab),
+      })),
       socialLinks: (query.data.socialLinks || []).map((link) => ({
         platform: link.platform || '',
         url: link.url || '',
@@ -102,6 +113,7 @@ function ProfileEditor() {
       <form onSubmit={form.handleSubmit((values) => save.mutate(values))} className="space-y-6">
         <Notice error={save.isError && errorMessage(save.error)} success={save.isSuccess && 'Perfil guardado correctamente.'} />
         <Section title="Información principal"><div className="grid gap-4 sm:grid-cols-2"><Input form={form} name="name" label="Nombre" /><Input form={form} name="headline" label="Titular" /><Input form={form} name="role" label="Rol" /><Input form={form} name="location" label="Ubicación" /><Input form={form} name="email" label="Email" type="email" /><Input form={form} name="availability" label="Disponibilidad" /><Input form={form} name="tagline" label="Tagline" /><Input form={form} name="resumeUrl" label="URL de CV" type="url" /><Field label="Consola del hero" error={form.formState.errors.heroConsole}><textarea {...form.register('heroConsole')} rows="5" className={inputClass} /></Field><Field label="Biografía" error={form.formState.errors.bio}><textarea {...form.register('bio')} rows="5" className={inputClass} /></Field><MediaPicker value={form.watch('avatar')} onChange={(value) => form.setValue('avatar', value, { shouldDirty: true })} label="Avatar" /></div></Section>
+        <ArraySection title="Botones del hero" fields={heroButtons} add={() => heroButtons.append({ label: '', href: '#contact', style: 'outline', openInNewTab: false })}>{(field, index) => <div key={field.id} className="space-y-4 rounded-xl border border-[var(--border)] p-4"><div className="grid gap-3 sm:grid-cols-[1fr_2fr_auto]"><Input form={form} name={`heroButtons.${index}.label`} label="Texto" /><Input form={form} name={`heroButtons.${index}.href`} label="Destino (#contact o URL)" /><Remove onClick={() => heroButtons.remove(index)} /></div><div className="grid gap-4 sm:grid-cols-[1fr_auto]"><ButtonStylePicker form={form} name={`heroButtons.${index}.style`} /><label className="mt-6 flex items-center gap-2 text-sm text-[var(--fg-muted)]"><input type="checkbox" {...form.register(`heroButtons.${index}.openInNewTab`)} /> Abrir en nueva ventana</label></div></div>}</ArraySection>
         <ArraySection title="Redes sociales" fields={social} add={() => social.append({ platform: '', url: '', icon: '', iconKind: 'class', iconSvg: '', iconPosition: 'left', iconDisplay: 'both', buttonStyle: 'outline' })}>{(field, index) => <div key={field.id} className="space-y-4 rounded-xl border border-[var(--border)] p-4"><div className="grid gap-3 sm:grid-cols-[1fr_2fr_auto]"><Input form={form} name={`socialLinks.${index}.platform`} label="Plataforma" /><Input form={form} name={`socialLinks.${index}.url`} label="URL" type="url" /><Remove onClick={() => social.remove(index)} /></div><SkillIconFields form={form} prefix={`socialLinks.${index}`} nameKey="platform" chipClass={`contact-chip is-${form.watch(`socialLinks.${index}.buttonStyle`) || 'outline'}`} /><ButtonStylePicker form={form} name={`socialLinks.${index}.buttonStyle`} /></div>}</ArraySection>
         <ArraySection title="Párrafos sobre mí" fields={paragraphs} add={() => paragraphs.append({ value: '' })}>{(field, index) => <div className="flex gap-3"><Field label={`Párrafo ${index + 1}`} error={form.formState.errors.aboutParagraphs?.[index]?.value}><textarea {...form.register(`aboutParagraphs.${index}.value`)} rows="3" className={inputClass} /></Field><Remove onClick={() => paragraphs.remove(index)} /></div>}</ArraySection>
         <ArraySection title="Highlights" fields={highlights} add={() => highlights.append({ label: '', value: '' })}>{(field, index) => <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]"><Input form={form} name={`highlights.${index}.label`} label="Etiqueta" /><Input form={form} name={`highlights.${index}.value`} label="Valor" /><Remove onClick={() => highlights.remove(index)} /></div>}</ArraySection>

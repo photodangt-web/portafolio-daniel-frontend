@@ -30,6 +30,15 @@ function adaptSocialLink(link) {
   }
 }
 
+function adaptHeroButton(button) {
+  return {
+    label: button.label || '',
+    href: button.href || button.url || '',
+    style: ['outline', 'filled', 'soft'].includes(button.style) ? button.style : 'outline',
+    openInNewTab: Boolean(button.openInNewTab),
+  }
+}
+
 export function adaptProfile(profile) {
   const socials = (profile.socialLinks || [])
     .filter(({ platform, url }) => platform && url)
@@ -43,6 +52,9 @@ export function adaptProfile(profile) {
     email: profile.email || '',
     availability: profile.availability || '',
     heroConsole: profile.heroConsole || '',
+    heroButtons: (profile.heroButtons || [])
+      .filter(({ label, href, url }) => label && (href || url))
+      .map(adaptHeroButton),
     avatar: resolveMediaUrl(profile.avatar),
     socials,
     about: {

@@ -11,6 +11,10 @@ export const profile = {
     'Construyo interfaces rápidas, limpias y con atención al detalle. De la idea al deploy.',
   email: 'hola@danieldelon.dev', // cámbialo por tu email real
   availability: 'Disponible para proyectos freelance y full-time',
+  heroButtons: [
+    { label: 'Ver trabajo', href: '#projects', style: 'filled', openInNewTab: false },
+    { label: 'Contactar', href: '#contact', style: 'outline', openInNewTab: false },
+  ],
   socials: {
     github: 'https://github.com/', // agrega tu usuario
     linkedin: 'https://linkedin.com/in/', // agrega tu perfil

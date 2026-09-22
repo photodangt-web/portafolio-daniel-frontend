@@ -1394,9 +1394,9 @@ body {
   inset: 0;
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, #050505 58%, transparent);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  background: color-mix(in srgb, #050505 78%, transparent);
+  backdrop-filter: blur(28px) saturate(120%);
+  -webkit-backdrop-filter: blur(28px) saturate(120%);
 }
 .project-lightbox-chrome {
   position: absolute;
@@ -1528,7 +1528,7 @@ body {
   .project-mosaic {
     width: 100%;
     min-height: 100svh;
-    padding: 4.5rem .7rem 5.75rem;
+    padding: 4.5rem .7rem 8.75rem;
   }
   .project-film-stage {
     grid-template-columns: 1fr;
@@ -1553,7 +1553,7 @@ body {
   .project-thumbs {
     width: 100%;
     min-height: 100svh;
-    padding: 4.25rem .55rem 5.5rem;
+    padding: 4.25rem .55rem 8.75rem;
   }
   .project-thumbs-stage {
     position: relative;
@@ -1591,7 +1591,11 @@ body {
     padding: 4rem .7rem 5rem;
   }
   .project-stack--static .project-stack-card { min-height: 70svh; }
-  .project-slide-nav { width: min(22rem, calc(100% - 1.5rem)); gap: .75rem; }
+  .project-slide-nav {
+    width: min(22rem, calc(100% - 1.5rem));
+    gap: .75rem;
+    bottom: max(0.7rem, env(safe-area-inset-bottom));
+  }
   .project-nav-prev,
   .project-nav-next { padding: .75rem 1.05rem; font-size: .82rem; }
 }

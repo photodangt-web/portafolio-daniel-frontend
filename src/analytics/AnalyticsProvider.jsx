@@ -37,19 +37,13 @@ function pageName(path) {
 
 export function AnalyticsProvider({ children }) {
   const location = useLocation()
-  const [consent, setConsentState] = useState(() => {
-    if (navigator.doNotTrack === '1') return 'denied'
-    try { return localStorage.getItem(CONSENT_KEY) || 'unknown' } catch { return 'unknown' }
-  })
+  const [consent] = useState('granted')
   const queue = useRef([])
   const timer = useRef(null)
   const ids = useRef(null)
   const publicRoute = !location.pathname.startsWith('/admin') && location.pathname !== '/login'
 
-  const setConsent = (value) => {
-    try { localStorage.setItem(CONSENT_KEY, value) } catch { /* Storage is optional. */ }
-    setConsentState(value)
-  }
+  const setConsent = () => {}
 
   const flush = useCallback(() => {
     timer.current = null
@@ -59,7 +53,7 @@ export function AnalyticsProvider({ children }) {
   }, [])
 
   const track = useCallback((eventType, target, metadata = {}) => {
-    if (!publicRoute || consent !== 'granted' || navigator.doNotTrack === '1') return
+    if (!publicRoute) return
     ids.current ??= { visitorId: storedId(localStorage, VISITOR_KEY), sessionId: storedId(sessionStorage, SESSION_KEY) }
     queue.current.push({
       eventType,
@@ -75,13 +69,13 @@ export function AnalyticsProvider({ children }) {
   }, [consent, flush, location.pathname, publicRoute])
 
   useEffect(() => {
-    if (!publicRoute || consent !== 'granted') return undefined
+    if (!publicRoute) return undefined
     track('page_view', undefined, location.pathname.startsWith('/blog/') ? { article: location.pathname.slice(6) } : {})
     return undefined
   }, [location.pathname, consent, publicRoute, track])
 
   useEffect(() => {
-    if (!publicRoute || consent !== 'granted') return undefined
+    if (!publicRoute) return undefined
     const sections = [...document.querySelectorAll('main section[id]')]
     const seenAt = new Map()
     const observer = new IntersectionObserver((entries) => {
@@ -100,7 +94,7 @@ export function AnalyticsProvider({ children }) {
   }, [location.pathname, consent, publicRoute, track])
 
   useEffect(() => {
-    if (!publicRoute || consent !== 'granted') return undefined
+    if (!publicRoute) return undefined
     const onClick = (event) => {
       const element = event.target.closest('[data-analytics], a, button')
       if (!element) return

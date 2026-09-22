@@ -8,7 +8,7 @@ import Notifications from './components/Notifications.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 import { AuthProvider } from './auth/AuthContext.jsx'
 import { AnalyticsProvider } from './analytics/AnalyticsProvider.jsx'
-import AnalyticsConsent from './components/AnalyticsConsent.jsx'
+
 
 const queryClient = new QueryClient()
 
@@ -34,7 +34,6 @@ createRoot(document.getElementById('root')).render(
           <BrowserRouter>
             <AnalyticsProvider>
               <App />
-              <AnalyticsConsent />
             </AnalyticsProvider>
           </BrowserRouter>
         </AuthProvider>

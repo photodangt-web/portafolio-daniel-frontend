@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { MapPin, ArrowDownRight } from 'lucide-react'
 import Magnetic from './Magnetic'
 import HeroPhoto from './HeroPhoto'
@@ -9,43 +9,18 @@ const heroButtonStyles = {
   soft: 'bg-[var(--bg-soft)] text-[var(--fg)] hover:bg-[var(--bg-card)]',
 }
 
-const ease = [0.16, 1, 0.3, 1]
-
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 32, filter: 'blur(10px)' },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
+    filter: 'blur(0px)',
     transition: {
       duration: 0.75,
       delay: 0.35 + i * 0.1,
-      ease,
+      ease: [0.16, 1, 0.3, 1],
     },
   }),
-}
-
-function HeroBlurText({ text, className, delay = 0, as: Tag = 'p', stagger = 0.055 }) {
-  const reduced = useReducedMotion()
-  const words = String(text || '').split(/\s+/).filter(Boolean)
-
-  return (
-    <Tag className={className}>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden className="flex flex-wrap">
-        {words.map((word, i) => (
-          <motion.span
-            key={`${word}-${i}`}
-            className="mr-[0.28em] inline-block last:mr-0"
-            initial={reduced ? false : { opacity: 0, y: 16, filter: 'blur(12px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: reduced ? 0 : 0.9, delay: delay + i * stagger, ease }}
-          >
-            {word}
-          </motion.span>
-        ))}
-      </span>
-    </Tag>
-  )
 }
 
 const tokenPattern = /("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b(?:const|let|var|function|return|async|await|export|import)\b|\b(?:true|false|null|undefined)\b|\b\d+(?:\.\d+)?\b)/g
@@ -121,26 +96,35 @@ export default function Hero({ profile }) {
             </span>
           </motion.div>
 
-          <HeroBlurText
-            text={profile.role}
-            delay={0.18}
-            stagger={0.04}
+          <motion.p
+            custom={0}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
             className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--fg-faint)]"
-          />
+          >
+            {profile.role}
+          </motion.p>
 
-          <HeroBlurText
-            text={profile.name}
-            delay={0.28}
-            stagger={0.08}
+          <motion.p
+            custom={1}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
             className="text-4xl font-semibold tracking-tight text-[var(--fg)] sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-7xl"
-          />
+          >
+            {profile.name}
+          </motion.p>
 
-          <HeroBlurText
-            text={profile.tagline}
-            delay={0.48}
-            stagger={0.028}
+          <motion.p
+            custom={2}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
             className="mt-6 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] md:text-lg"
-          />
+          >
+            {profile.tagline}
+          </motion.p>
 
           <motion.div
             custom={3}

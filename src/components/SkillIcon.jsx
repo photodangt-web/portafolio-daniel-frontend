@@ -27,7 +27,7 @@ class IconGuard extends Component {
   }
 }
 
-export default function SkillIcon({ skill, className = '', onRatio }) {
+export default function SkillIcon({ skill, className = '', onRatio, onImage }) {
   const kind = skill?.iconKind || 'class'
   const [failed, setFailed] = useState(false)
 
@@ -58,7 +58,10 @@ export default function SkillIcon({ skill, className = '', onRatio }) {
           src={src}
           alt=""
           className={className}
-          onLoad={(event) => report(event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)}
+          onLoad={(event) => {
+            report(event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)
+            onImage?.(event.currentTarget)
+          }}
           onError={() => setFailed(true)}
         />
       </IconGuard>
@@ -81,7 +84,10 @@ export default function SkillIcon({ skill, className = '', onRatio }) {
         src={resolveMediaUrl(skill.icon)}
         alt=""
         className={className}
-        onLoad={(event) => report(event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)}
+        onLoad={(event) => {
+            report(event.currentTarget.naturalWidth, event.currentTarget.naturalHeight)
+            onImage?.(event.currentTarget)
+          }}
         onError={() => setFailed(true)}
       />
     )

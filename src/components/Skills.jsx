@@ -1,31 +1,10 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useMemo, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Section from './Section'
 import SkillIcon from './SkillIcon'
 
-const container = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.07 } },
-}
-
-const chip = {
-  hidden: { opacity: 0, y: 8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
-  },
-}
-
-const panel = {
-  hidden: { opacity: 0, y: 36, rotate: -1 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotate: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-  },
-}
+const ease = [0.16, 1, 0.3, 1]
+const ALL = '__all__'
 
 function normalizeItem(item) {
   if (typeof item === 'string') return { name: item, iconDisplay: 'text', iconPosition: 'left' }
@@ -39,40 +18,97 @@ function normalizeItem(item) {
   }
 }
 
-function SkillChip({ skill }) {
-  const [wide, setWide] = useState(false)
-  const display = skill.iconDisplay || 'both'
-  const showIcon = display !== 'text'
-  const showText = display !== 'icon'
-  const iconOnly = display === 'icon'
+function hasIcon(skill) {
+  return skill.iconDisplay !== 'text' && Boolean(skill.icon || skill.iconSvg)
+}
 
+function initials(name = '') {
+  const parts = name.replace(/[^\p{L}\p{N}\s]/gu, ' ').trim().split(/\s+/)
+  return (parts.length > 1 ? parts[0][0] + parts[1][0] : name.slice(0, 2)).toUpperCase()
+}
+
+function onSpotlight(e) {
+  const el = e.currentTarget
+  const rect = el.getBoundingClientRect()
+  el.style.setProperty('--mx', `${e.clientX - rect.left}px`)
+  el.style.setProperty('--my', `${e.clientY - rect.top}px`)
+}
+
+function SkillTile({ skill, category, index }) {
   return (
     <motion.li
-      variants={chip}
-      whileHover={{ y: -2, transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] } }}
-      className={`skill-chip ${skill.iconPosition === 'right' ? 'is-right' : 'is-left'} ${iconOnly ? 'is-icon-only' : ''} ${wide && iconOnly ? 'is-wide' : ''}`}
+      layout
+      initial={{ opacity: 0, scale: 0.92, y: 10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.18 } }}
+      transition={{ duration: 0.45, ease }}
+      onMouseMove={onSpotlight}
+      className="skill-tile group"
     >
-      {showIcon && (
-        <SkillIcon
-          skill={skill}
-          className="skill-chip-icon"
-          onRatio={(ratio) => setWide(ratio > 1.35)}
-        />
+      <div className="skill-tile-icon">
+        {hasIcon(skill) ? (
+          <>
+            <SkillIcon skill={skill} className="skill-tile-halo" />
+            <SkillIcon skill={skill} className="skill-tile-img" />
+          </>
+        ) : (
+          <span className="skill-tile-mono">{initials(skill.name)}</span>
+        )}
+      </div>
+      {index && (
+        <span className="absolute right-2.5 top-2 font-mono text-[10px] text-[var(--fg-faint)]" title={category}>
+          {index}
+        </span>
       )}
-      {showText && <span>{skill.name}</span>}
+      <p className="w-full truncate text-center text-[13px] font-medium tracking-tight text-[var(--fg)]">{skill.name}</p>
     </motion.li>
   )
 }
 
+function Marquee({ items }) {
+  const withIcons = items.filter(hasIcon)
+  if (withIcons.length < 6) return null
+  const loop = [...withIcons, ...withIcons]
+
+  return (
+    <div className="skill-marquee mt-6" aria-hidden>
+      <div className="skill-marquee-track">
+        {loop.map((skill, i) => (
+          <span key={`${skill.name}-${i}`} className="skill-marquee-item">
+            <SkillIcon skill={skill} className="skill-marquee-icon" />
+            <span>{skill.name}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Skills({ skills, header }) {
-  const categories = Array.isArray(skills?.categories)
-    ? skills.categories
-        .map((cat) => ({
-          title: String(cat?.title || 'Otros').trim() || 'Otros',
-          items: Array.isArray(cat?.items) ? cat.items.map(normalizeItem).filter((item) => item.name) : [],
-        }))
-        .filter((cat) => cat.items.length > 0)
-    : []
+  const categories = useMemo(() => (
+    Array.isArray(skills?.categories)
+      ? skills.categories
+          .map((cat) => ({
+            title: String(cat?.title || 'Otros').trim() || 'Otros',
+            items: Array.isArray(cat?.items) ? cat.items.map(normalizeItem).filter((item) => item.name) : [],
+          }))
+          .filter((cat) => cat.items.length > 0)
+      : []
+  ), [skills])
+
+  const [active, setActive] = useState(ALL)
+  const total = categories.reduce((sum, cat) => sum + cat.items.length, 0)
+
+  const visible = useMemo(() => {
+    const source = active === ALL ? categories : categories.filter((cat) => cat.title === active)
+    return source.flatMap((cat) => {
+      const index = String(categories.indexOf(cat) + 1).padStart(2, '0')
+      return cat.items.map((skill) => ({ skill, category: cat.title, index }))
+    })
+  }, [active, categories])
+
+  const allItems = useMemo(() => categories.flatMap((cat) => cat.items), [categories])
+  const tabs = [{ title: ALL, label: 'Todos', count: total }, ...categories.map((cat) => ({ title: cat.title, label: cat.title, count: cat.items.length }))]
 
   return (
     <Section
@@ -82,35 +118,58 @@ export default function Skills({ skills, header }) {
       description={header.description}
     >
       <motion.div
-        variants={container}
-        initial="hidden"
-        animate="visible"
-        className="grid gap-4 lg:grid-cols-2"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.7, ease }}
+        className="skill-board"
       >
-        {categories.map((cat, catIndex) => (
-          <motion.div
-            key={`${cat.title}-${catIndex}`}
-            variants={panel}
-            whileHover={{ y: -4 }}
-            className="relative overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--bg-card)] p-6 md:p-7"
-          >
-            <span className="absolute right-5 top-5 font-mono text-xs text-[var(--fg-faint)]">
-              0{catIndex + 1}
-            </span>
-            <div className="mb-5 flex items-center gap-3">
-              <span className="h-8 w-1 rounded-full bg-[var(--fg)]" />
-              <h3 className="text-sm font-semibold tracking-tight text-[var(--fg)]">
-                {cat.title}
-              </h3>
-            </div>
-            <motion.ul variants={container} className="flex flex-wrap gap-2">
-              {cat.items.map((skill) => (
-                <SkillChip key={`${cat.title}-${skill.name}`} skill={skill} />
-              ))}
-            </motion.ul>
-          </motion.div>
-        ))}
+        <div className="flex flex-col gap-4 border-b border-[var(--border)] p-3 md:flex-row md:items-center md:justify-between md:p-4">
+          <div className="skill-tabs" role="tablist" aria-label="Categorías de habilidades">
+            {tabs.map((tab) => {
+              const selected = active === tab.title
+              return (
+                <button
+                  key={tab.title}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => setActive(tab.title)}
+                  className={`skill-tab ${selected ? 'is-active' : ''}`}
+                >
+                  {selected && (
+                    <motion.span
+                      layoutId="skill-tab-pill"
+                      className="skill-tab-pill"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                  <span className="skill-tab-count relative z-10">{tab.count}</span>
+                </button>
+              )
+            })}
+          </div>
+          <p className="hidden shrink-0 px-2 font-mono text-[11px] text-[var(--fg-faint)] md:block">
+            {String(visible.length).padStart(2, '0')} / {String(total).padStart(2, '0')} tecnologías
+          </p>
+        </div>
+
+        <motion.ul layout className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-3 md:grid-cols-4 md:p-4 lg:grid-cols-6">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {visible.map(({ skill, category, index }) => (
+              <SkillTile
+                key={`${category}-${skill.name}`}
+                skill={skill}
+                category={category}
+                index={active === ALL ? index : null}
+              />
+            ))}
+          </AnimatePresence>
+        </motion.ul>
       </motion.div>
+
+      <Marquee items={allItems} />
     </Section>
   )
 }

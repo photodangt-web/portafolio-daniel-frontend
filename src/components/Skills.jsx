@@ -3,16 +3,21 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Section from './Section'
 import SkillIcon from './SkillIcon'
 
-const ease = [0.16, 1, 0.3, 1]
-
-const row = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease, staggerChildren: 0.04, delayChildren: 0.15 } },
+const grid = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.035, delayChildren: 0.1 } },
 }
 
-const icon = {
-  hidden: { opacity: 0, y: 14, scale: 0.6 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 380, damping: 22 } },
+const tile = {
+  hidden: { opacity: 0, y: 18, scale: 0.85 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 320, damping: 24 } },
+}
+
+function onSpotlight(e) {
+  const el = e.currentTarget
+  const rect = el.getBoundingClientRect()
+  el.style.setProperty('--mx', `${e.clientX - rect.left}px`)
+  el.style.setProperty('--my', `${e.clientY - rect.top}px`)
 }
 
 function normalizeItem(item) {
@@ -66,7 +71,7 @@ async function isDarkLogo(src) {
   }
 }
 
-function SkillIconItem({ skill }) {
+function StackTile({ skill, category }) {
   const [open, setOpen] = useState(false)
   const [dark, setDark] = useState(false)
 
@@ -76,38 +81,40 @@ function SkillIconItem({ skill }) {
 
   return (
     <motion.li
-      variants={icon}
-      whileHover={{ y: -6, scale: 1.18 }}
-      whileFocus={{ y: -6, scale: 1.18 }}
-      transition={{ type: 'spring', stiffness: 420, damping: 18 }}
+      variants={tile}
+      whileHover={{ y: -5 }}
+      whileFocus={{ y: -5 }}
+      whileTap={{ scale: 0.94 }}
       tabIndex={0}
       aria-label={skill.name}
+      onMouseMove={onSpotlight}
       onHoverStart={() => setOpen(true)}
       onHoverEnd={() => setOpen(false)}
       onFocus={() => setOpen(true)}
       onBlur={() => setOpen(false)}
-      className={`skill-icon ${dark ? 'is-dark-logo' : ''}`}
+      className={`stack-tile ${dark ? 'is-dark-logo' : ''}`}
     >
       {hasIcon(skill) ? (
         <>
-          <SkillIcon skill={skill} className="skill-icon-halo" />
-          <SkillIcon skill={skill} className="skill-icon-img" onImage={onImage} />
+          <SkillIcon skill={skill} className="stack-tile-halo" />
+          <SkillIcon skill={skill} className="stack-tile-img" onImage={onImage} />
         </>
       ) : (
-        <span className="skill-icon-mono">{initials(skill.name)}</span>
+        <span className="stack-tile-mono">{initials(skill.name)}</span>
       )}
 
       <AnimatePresence>
         {open && (
           <motion.span
             role="tooltip"
-            className="skill-tooltip"
+            className="stack-tooltip"
             initial={{ opacity: 0, y: 6, x: '-50%', scale: 0.85 }}
             animate={{ opacity: 1, y: 0, x: '-50%', scale: 1 }}
             exit={{ opacity: 0, y: 4, x: '-50%', scale: 0.9, transition: { duration: 0.12 } }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           >
             {skill.name}
+            {category && <small>{category}</small>}
           </motion.span>
         )}
       </AnimatePresence>
@@ -134,35 +141,17 @@ export default function Skills({ skills, header }) {
       title={header.title}
       description={header.description}
     >
-      <div>
-        {categories.map((cat, catIndex) => (
-          <motion.div
-            key={`${cat.title}-${catIndex}`}
-            variants={row}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            className="skill-row grid gap-5 py-8 md:grid-cols-[minmax(0,15rem)_1fr] md:gap-10 md:py-10"
-          >
-            <div className="flex items-baseline gap-3 md:flex-col md:gap-1.5">
-              <span className="font-mono text-xs text-[var(--fg-faint)]">
-                {String(catIndex + 1).padStart(2, '0')}
-              </span>
-              <h3 className="text-base font-semibold tracking-tight text-[var(--fg)] md:text-lg">
-                {cat.title}
-              </h3>
-              <p className="text-xs text-[var(--fg-faint)]">
-                {cat.items.length} tecnologías
-              </p>
-            </div>
-            <ul className="skill-icons flex flex-wrap gap-x-3 gap-y-4 md:gap-x-5">
-              {cat.items.map((skill) => (
-                <SkillIconItem key={`${cat.title}-${skill.name}`} skill={skill} />
-              ))}
-            </ul>
-          </motion.div>
-        ))}
-      </div>
+      <motion.ul
+        variants={grid}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-60px' }}
+        className="stack-grid"
+      >
+        {categories.flatMap((cat) => cat.items.map((skill) => (
+          <StackTile key={`${cat.title}-${skill.name}`} skill={skill} category={cat.title} />
+        )))}
+      </motion.ul>
     </Section>
   )
 }

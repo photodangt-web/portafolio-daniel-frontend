@@ -1728,74 +1728,119 @@ h1, h2, h3 {
   height: 1.15rem;
 }
 
-/* Skills — minimal icon rows */
-.skill-row {
-  border-top: 1px solid var(--border);
+/* Skills — flat icon tile grid */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 4.25rem);
+  gap: .65rem;
 }
-.skill-row:last-child { border-bottom: 1px solid var(--border); }
-.skill-icons:hover .skill-icon:not(:hover):not(:focus-visible) {
-  opacity: .3;
-  filter: grayscale(1) blur(.5px);
+@media (min-width: 768px) {
+  .stack-grid { grid-template-columns: repeat(auto-fill, 5.25rem); gap: .85rem; }
 }
-.skill-icon {
+.stack-tile {
+  --edge: color-mix(in srgb, var(--fg) 15%, transparent);
   position: relative;
   display: grid;
   place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
+  aspect-ratio: 1;
   cursor: default;
   outline: none;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--fg) 5%, var(--bg-card)), var(--bg) 85%);
   transition: opacity .35s ease, filter .35s ease;
 }
-.skill-icon-img,
-.skill-icon-halo,
-.skill-icon-img svg,
-.skill-icon-halo svg {
+/* Hairline border lit from the top that fades out towards the bottom */
+.stack-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--edge), transparent 75%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background .35s ease;
+}
+/* Cursor spotlight */
+.stack-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(90px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--fg) 9%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+}
+.stack-tile:hover,
+.stack-tile:focus-visible { --edge: color-mix(in srgb, var(--fg) 38%, transparent); }
+.stack-tile:hover::after,
+.stack-tile:focus-visible::after { opacity: 1; }
+.stack-grid:hover .stack-tile:not(:hover):not(:focus-visible) { opacity: .45; filter: grayscale(.85); }
+
+.stack-tile-img,
+.stack-tile-halo,
+.stack-tile-img svg,
+.stack-tile-halo svg {
   display: block;
   width: auto;
-  max-width: 3rem;
-  height: 2.1rem;
+  max-width: 2.6rem;
+  height: 1.9rem;
   object-fit: contain;
 }
-.skill-icon-img { position: relative; z-index: 1; }
-.skill-icon-halo {
+@media (min-width: 768px) {
+  .stack-tile-img, .stack-tile-halo, .stack-tile-img svg, .stack-tile-halo svg { max-width: 3rem; height: 2.25rem; }
+}
+.stack-tile-img { position: relative; z-index: 1; transition: transform .45s cubic-bezier(.16,1,.3,1); }
+.stack-tile:hover .stack-tile-img { transform: scale(1.12); }
+.stack-tile-halo {
   position: absolute;
   inset: 0;
   margin: auto;
-  filter: blur(16px) saturate(1.8);
+  filter: blur(18px) saturate(1.8);
   opacity: 0;
-  transform: scale(1.5);
-  transition: opacity .4s ease;
+  transform: scale(1.6);
+  transition: opacity .45s ease;
   pointer-events: none;
 }
-.skill-icon:hover .skill-icon-halo,
-.skill-icon:focus-visible .skill-icon-halo { opacity: .55; }
+.stack-tile:hover .stack-tile-halo,
+.stack-tile:focus-visible .stack-tile-halo { opacity: .6; }
 /* Monochrome-dark logos (Next, GitHub, Vercel…) flip to white on dark backgrounds */
-.dark .skill-icon.is-dark-logo .skill-icon-img,
-.dark .skill-icon.is-dark-logo .skill-icon-halo { filter: invert(1); }
-.dark .skill-icon.is-dark-logo .skill-icon-halo { filter: invert(1) blur(16px); }
-.skill-icon-mono {
+.dark .stack-tile.is-dark-logo .stack-tile-img { filter: invert(1); }
+.dark .stack-tile.is-dark-logo .stack-tile-halo { filter: invert(1) blur(18px); }
+.stack-tile-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: .95rem;
   font-weight: 600;
   color: var(--fg-muted);
 }
-.skill-tooltip {
+.stack-tooltip {
   position: absolute;
-  bottom: calc(100% + .35rem);
+  bottom: calc(100% + .5rem);
   left: 50%;
   z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   pointer-events: none;
   white-space: nowrap;
-  border-radius: .55rem;
+  border-radius: .6rem;
   background: var(--fg);
-  padding: .3rem .6rem;
-  font-size: .72rem;
-  font-weight: 500;
+  padding: .35rem .7rem;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1.2;
   color: var(--bg);
-  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  box-shadow: 0 10px 30px rgba(0,0,0,.3);
 }
-.skill-tooltip::after {
+.stack-tooltip small {
+  font-size: .62rem;
+  font-weight: 500;
+  opacity: .55;
+}
+.stack-tooltip::after {
   content: "";
   position: absolute;
   top: 100%;
